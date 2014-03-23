@@ -28,10 +28,15 @@
     
     // TEST
     F3HGameboardView *gameboard = [F3HGameboardView gameboardWithDimension:4
-                                                                 cellWidth:40
+                                                                 cellWidth:50
                                                                cellPadding:6
                                                            backgroundColor:[UIColor blackColor]
                                                            foregroundColor:[UIColor darkGrayColor]];
+    CGRect gameboardFrame = gameboard.frame;
+    gameboardFrame.origin.x = 0.5*(self.view.bounds.size.width - gameboardFrame.size.width);
+    gameboardFrame.origin.y = 0.5*(self.view.bounds.size.height - gameboardFrame.size.height);
+    gameboard.frame = gameboardFrame;
+    
     [self.view addSubview:gameboard];
     
     [gameboard insertTileAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]

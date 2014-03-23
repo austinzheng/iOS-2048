@@ -9,6 +9,7 @@
 #import "F3HGameboardView.h"
 
 #import "F3HTileView.h"
+#import "F3HTileColorProvider.h"
 
 #define PER_SQUARE_SLIDE_DURATION 0.08
 
@@ -20,6 +21,8 @@
 @property (nonatomic) CGFloat tileSideLength;   // TODO
 
 @property (nonatomic) CGFloat padding;
+
+@property (nonatomic, strong) F3HTileColorProvider *provider;
 
 @end
 
@@ -81,6 +84,7 @@
     F3HTileView *tile = [F3HTileView tileForPosition:position
                                           sideLength:self.tileSideLength
                                                value:value];
+    tile.delegate = self.provider;
     [self addSubview:tile];
     self.boardTiles[path] = tile;
     // TODO: Animation:
@@ -109,7 +113,7 @@
         NSAssert(NO, @"Invalid tile movement. Tried to move from %@ to %@", start, end);
     }
     
-    // TODO: finalize Animation
+    // TODO: finalize animation
     CGFloat x = self.padding + end.row*(self.tileSideLength + self.padding);
     CGFloat y = self.padding + end.section*(self.tileSideLength + self.padding);
     CGRect finalFrame = tile.frame;
@@ -126,6 +130,13 @@
                          self.boardTiles[end] = tile;
                          [endTile removeFromSuperview];
                      }];
+}
+
+- (F3HTileColorProvider *)provider {
+    if (!_provider) {
+        _provider = [F3HTileColorProvider new];
+    }
+    return _provider;
 }
 
 - (NSMutableDictionary *)boardTiles {

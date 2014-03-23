@@ -8,8 +8,15 @@
 
 #import "F3HTileView.h"
 
+#import "F3HTileColorProvider.h"
+
 @interface F3HTileView ()
+
+@property (nonatomic, readonly) UIColor *defaultBackgroundColor;
+@property (nonatomic, readonly) UIColor *defaultNumberColor;
+
 @property (nonatomic, strong) UILabel *numberLabel;
+@property (nonatomic) NSUInteger value;
 @end
 
 @implementation F3HTileView
@@ -22,8 +29,9 @@
                                                                        side,
                                                                        side)];
     tile.tileValue = value;
-    // TODO: fix
-    tile.backgroundColor = [UIColor greenColor];
+    tile.backgroundColor = tile.defaultBackgroundColor;
+    tile.numberLabel.textColor = tile.defaultNumberColor;
+    tile.value = value;
     return tile;
 }
 
@@ -38,13 +46,33 @@
     label.textAlignment = NSTextAlignmentCenter;
     [self addSubview:label];
     self.numberLabel = label;
-    // TODO
     return self;
+}
+
+- (void)setDelegate:(id<F3HTileColorProviderProtocol>)delegate {
+    _delegate = delegate;
+    if (delegate) {
+        self.backgroundColor = [delegate tileColorForValue:self.tileValue];
+        self.numberLabel.textColor = [delegate numberColorForValue:self.tileValue];
+    }
 }
 
 - (void)setTileValue:(NSInteger)tileValue {
     _tileValue = tileValue;
     self.numberLabel.text = [@(tileValue) stringValue];
+    if (self.delegate) {
+        self.backgroundColor = [self.delegate tileColorForValue:tileValue];
+        self.numberLabel.textColor = [self.delegate numberColorForValue:tileValue];
+    }
+    self.value = tileValue;
+}
+
+- (UIColor *)defaultBackgroundColor {
+    return [UIColor lightGrayColor];
+}
+
+- (UIColor *)defaultNumberColor {
+    return [UIColor blackColor];
 }
 
 @end

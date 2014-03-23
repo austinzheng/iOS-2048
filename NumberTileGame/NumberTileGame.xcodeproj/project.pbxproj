@@ -23,6 +23,9 @@
 		1A3487DF18DEAD6E00D021C3 /* NumberTileGameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487DE18DEAD6E00D021C3 /* NumberTileGameTests.m */; };
 		1A3487EA18DEAD9500D021C3 /* F3HGameboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487E918DEAD9500D021C3 /* F3HGameboardView.m */; };
 		1A3487ED18DEAECA00D021C3 /* F3HTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487EC18DEAECA00D021C3 /* F3HTileView.m */; };
+		1A3487F018DEBAC900D021C3 /* F3HNumberTileLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487EF18DEBAC900D021C3 /* F3HNumberTileLogic.m */; };
+		1A3487F318DEBADA00D021C3 /* F3HNumberTileGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487F218DEBADA00D021C3 /* F3HNumberTileGameViewController.m */; };
+		1A3487F618DEBB9C00D021C3 /* F3HTileColorProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487F518DEBB9C00D021C3 /* F3HTileColorProvider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +62,12 @@
 		1A3487E918DEAD9500D021C3 /* F3HGameboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HGameboardView.m; sourceTree = "<group>"; };
 		1A3487EB18DEAECA00D021C3 /* F3HTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HTileView.h; sourceTree = "<group>"; };
 		1A3487EC18DEAECA00D021C3 /* F3HTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HTileView.m; sourceTree = "<group>"; };
+		1A3487EE18DEBAC900D021C3 /* F3HNumberTileLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HNumberTileLogic.h; sourceTree = "<group>"; };
+		1A3487EF18DEBAC900D021C3 /* F3HNumberTileLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HNumberTileLogic.m; sourceTree = "<group>"; };
+		1A3487F118DEBADA00D021C3 /* F3HNumberTileGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HNumberTileGameViewController.h; sourceTree = "<group>"; };
+		1A3487F218DEBADA00D021C3 /* F3HNumberTileGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HNumberTileGameViewController.m; sourceTree = "<group>"; };
+		1A3487F418DEBB9C00D021C3 /* F3HTileColorProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HTileColorProvider.h; sourceTree = "<group>"; };
+		1A3487F518DEBB9C00D021C3 /* F3HTileColorProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HTileColorProvider.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +138,12 @@
 				1A3487E918DEAD9500D021C3 /* F3HGameboardView.m */,
 				1A3487EB18DEAECA00D021C3 /* F3HTileView.h */,
 				1A3487EC18DEAECA00D021C3 /* F3HTileView.m */,
+				1A3487EE18DEBAC900D021C3 /* F3HNumberTileLogic.h */,
+				1A3487EF18DEBAC900D021C3 /* F3HNumberTileLogic.m */,
+				1A3487F118DEBADA00D021C3 /* F3HNumberTileGameViewController.h */,
+				1A3487F218DEBADA00D021C3 /* F3HNumberTileGameViewController.m */,
+				1A3487F418DEBB9C00D021C3 /* F3HTileColorProvider.h */,
+				1A3487F518DEBB9C00D021C3 /* F3HTileColorProvider.m */,
 			);
 			path = NumberTileGame;
 			sourceTree = "<group>";
@@ -261,9 +276,12 @@
 			files = (
 				1A3487C118DEAD6E00D021C3 /* F3HAppDelegate.m in Sources */,
 				1A3487BD18DEAD6E00D021C3 /* main.m in Sources */,
+				1A3487F618DEBB9C00D021C3 /* F3HTileColorProvider.m in Sources */,
 				1A3487CA18DEAD6E00D021C3 /* F3HViewController.m in Sources */,
+				1A3487F318DEBADA00D021C3 /* F3HNumberTileGameViewController.m in Sources */,
 				1A3487ED18DEAECA00D021C3 /* F3HTileView.m in Sources */,
 				1A3487EA18DEAD9500D021C3 /* F3HGameboardView.m in Sources */,
+				1A3487F018DEBAC900D021C3 /* F3HNumberTileLogic.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
