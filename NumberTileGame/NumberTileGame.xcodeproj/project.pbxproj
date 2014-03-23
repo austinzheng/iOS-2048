@@ -1,0 +1,485 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1A3487B118DEAD6E00D021C3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3487B018DEAD6E00D021C3 /* Foundation.framework */; };
+		1A3487B318DEAD6E00D021C3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3487B218DEAD6E00D021C3 /* CoreGraphics.framework */; };
+		1A3487B518DEAD6E00D021C3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3487B418DEAD6E00D021C3 /* UIKit.framework */; };
+		1A3487BB18DEAD6E00D021C3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A3487B918DEAD6E00D021C3 /* InfoPlist.strings */; };
+		1A3487BD18DEAD6E00D021C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487BC18DEAD6E00D021C3 /* main.m */; };
+		1A3487C118DEAD6E00D021C3 /* F3HAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487C018DEAD6E00D021C3 /* F3HAppDelegate.m */; };
+		1A3487C418DEAD6E00D021C3 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A3487C218DEAD6E00D021C3 /* Main_iPhone.storyboard */; };
+		1A3487CA18DEAD6E00D021C3 /* F3HViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487C918DEAD6E00D021C3 /* F3HViewController.m */; };
+		1A3487CC18DEAD6E00D021C3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A3487CB18DEAD6E00D021C3 /* Images.xcassets */; };
+		1A3487D318DEAD6E00D021C3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3487D218DEAD6E00D021C3 /* XCTest.framework */; };
+		1A3487D418DEAD6E00D021C3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3487B018DEAD6E00D021C3 /* Foundation.framework */; };
+		1A3487D518DEAD6E00D021C3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3487B418DEAD6E00D021C3 /* UIKit.framework */; };
+		1A3487DD18DEAD6E00D021C3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A3487DB18DEAD6E00D021C3 /* InfoPlist.strings */; };
+		1A3487DF18DEAD6E00D021C3 /* NumberTileGameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487DE18DEAD6E00D021C3 /* NumberTileGameTests.m */; };
+		1A3487EA18DEAD9500D021C3 /* F3HGameboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487E918DEAD9500D021C3 /* F3HGameboardView.m */; };
+		1A3487ED18DEAECA00D021C3 /* F3HTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487EC18DEAECA00D021C3 /* F3HTileView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1A3487D618DEAD6E00D021C3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A3487A518DEAD6E00D021C3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A3487AC18DEAD6E00D021C3;
+			remoteInfo = NumberTileGame;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1A3487AD18DEAD6E00D021C3 /* NumberTileGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NumberTileGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A3487B018DEAD6E00D021C3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1A3487B218DEAD6E00D021C3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1A3487B418DEAD6E00D021C3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		1A3487B818DEAD6E00D021C3 /* NumberTileGame-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NumberTileGame-Info.plist"; sourceTree = "<group>"; };
+		1A3487BA18DEAD6E00D021C3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1A3487BC18DEAD6E00D021C3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1A3487BE18DEAD6E00D021C3 /* NumberTileGame-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NumberTileGame-Prefix.pch"; sourceTree = "<group>"; };
+		1A3487BF18DEAD6E00D021C3 /* F3HAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = F3HAppDelegate.h; sourceTree = "<group>"; };
+		1A3487C018DEAD6E00D021C3 /* F3HAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = F3HAppDelegate.m; sourceTree = "<group>"; };
+		1A3487C318DEAD6E00D021C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		1A3487C818DEAD6E00D021C3 /* F3HViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = F3HViewController.h; sourceTree = "<group>"; };
+		1A3487C918DEAD6E00D021C3 /* F3HViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = F3HViewController.m; sourceTree = "<group>"; };
+		1A3487CB18DEAD6E00D021C3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		1A3487D118DEAD6E00D021C3 /* NumberTileGameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NumberTileGameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A3487D218DEAD6E00D021C3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		1A3487DA18DEAD6E00D021C3 /* NumberTileGameTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NumberTileGameTests-Info.plist"; sourceTree = "<group>"; };
+		1A3487DC18DEAD6E00D021C3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1A3487DE18DEAD6E00D021C3 /* NumberTileGameTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NumberTileGameTests.m; sourceTree = "<group>"; };
+		1A3487E818DEAD9500D021C3 /* F3HGameboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HGameboardView.h; sourceTree = "<group>"; };
+		1A3487E918DEAD9500D021C3 /* F3HGameboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HGameboardView.m; sourceTree = "<group>"; };
+		1A3487EB18DEAECA00D021C3 /* F3HTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HTileView.h; sourceTree = "<group>"; };
+		1A3487EC18DEAECA00D021C3 /* F3HTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HTileView.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1A3487AA18DEAD6E00D021C3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A3487B318DEAD6E00D021C3 /* CoreGraphics.framework in Frameworks */,
+				1A3487B518DEAD6E00D021C3 /* UIKit.framework in Frameworks */,
+				1A3487B118DEAD6E00D021C3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A3487CE18DEAD6E00D021C3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A3487D318DEAD6E00D021C3 /* XCTest.framework in Frameworks */,
+				1A3487D518DEAD6E00D021C3 /* UIKit.framework in Frameworks */,
+				1A3487D418DEAD6E00D021C3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1A3487A418DEAD6E00D021C3 = {
+			isa = PBXGroup;
+			children = (
+				1A3487B618DEAD6E00D021C3 /* NumberTileGame */,
+				1A3487D818DEAD6E00D021C3 /* NumberTileGameTests */,
+				1A3487AF18DEAD6E00D021C3 /* Frameworks */,
+				1A3487AE18DEAD6E00D021C3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1A3487AE18DEAD6E00D021C3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A3487AD18DEAD6E00D021C3 /* NumberTileGame.app */,
+				1A3487D118DEAD6E00D021C3 /* NumberTileGameTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1A3487AF18DEAD6E00D021C3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1A3487B018DEAD6E00D021C3 /* Foundation.framework */,
+				1A3487B218DEAD6E00D021C3 /* CoreGraphics.framework */,
+				1A3487B418DEAD6E00D021C3 /* UIKit.framework */,
+				1A3487D218DEAD6E00D021C3 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1A3487B618DEAD6E00D021C3 /* NumberTileGame */ = {
+			isa = PBXGroup;
+			children = (
+				1A3487BF18DEAD6E00D021C3 /* F3HAppDelegate.h */,
+				1A3487C018DEAD6E00D021C3 /* F3HAppDelegate.m */,
+				1A3487C218DEAD6E00D021C3 /* Main_iPhone.storyboard */,
+				1A3487C818DEAD6E00D021C3 /* F3HViewController.h */,
+				1A3487C918DEAD6E00D021C3 /* F3HViewController.m */,
+				1A3487CB18DEAD6E00D021C3 /* Images.xcassets */,
+				1A3487B718DEAD6E00D021C3 /* Supporting Files */,
+				1A3487E818DEAD9500D021C3 /* F3HGameboardView.h */,
+				1A3487E918DEAD9500D021C3 /* F3HGameboardView.m */,
+				1A3487EB18DEAECA00D021C3 /* F3HTileView.h */,
+				1A3487EC18DEAECA00D021C3 /* F3HTileView.m */,
+			);
+			path = NumberTileGame;
+			sourceTree = "<group>";
+		};
+		1A3487B718DEAD6E00D021C3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1A3487B818DEAD6E00D021C3 /* NumberTileGame-Info.plist */,
+				1A3487B918DEAD6E00D021C3 /* InfoPlist.strings */,
+				1A3487BC18DEAD6E00D021C3 /* main.m */,
+				1A3487BE18DEAD6E00D021C3 /* NumberTileGame-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1A3487D818DEAD6E00D021C3 /* NumberTileGameTests */ = {
+			isa = PBXGroup;
+			children = (
+				1A3487DE18DEAD6E00D021C3 /* NumberTileGameTests.m */,
+				1A3487D918DEAD6E00D021C3 /* Supporting Files */,
+			);
+			path = NumberTileGameTests;
+			sourceTree = "<group>";
+		};
+		1A3487D918DEAD6E00D021C3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1A3487DA18DEAD6E00D021C3 /* NumberTileGameTests-Info.plist */,
+				1A3487DB18DEAD6E00D021C3 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1A3487AC18DEAD6E00D021C3 /* NumberTileGame */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A3487E218DEAD6E00D021C3 /* Build configuration list for PBXNativeTarget "NumberTileGame" */;
+			buildPhases = (
+				1A3487A918DEAD6E00D021C3 /* Sources */,
+				1A3487AA18DEAD6E00D021C3 /* Frameworks */,
+				1A3487AB18DEAD6E00D021C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NumberTileGame;
+			productName = NumberTileGame;
+			productReference = 1A3487AD18DEAD6E00D021C3 /* NumberTileGame.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1A3487D018DEAD6E00D021C3 /* NumberTileGameTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A3487E518DEAD6E00D021C3 /* Build configuration list for PBXNativeTarget "NumberTileGameTests" */;
+			buildPhases = (
+				1A3487CD18DEAD6E00D021C3 /* Sources */,
+				1A3487CE18DEAD6E00D021C3 /* Frameworks */,
+				1A3487CF18DEAD6E00D021C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1A3487D718DEAD6E00D021C3 /* PBXTargetDependency */,
+			);
+			name = NumberTileGameTests;
+			productName = NumberTileGameTests;
+			productReference = 1A3487D118DEAD6E00D021C3 /* NumberTileGameTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1A3487A518DEAD6E00D021C3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = F3H;
+				LastUpgradeCheck = 0510;
+				TargetAttributes = {
+					1A3487D018DEAD6E00D021C3 = {
+						TestTargetID = 1A3487AC18DEAD6E00D021C3;
+					};
+				};
+			};
+			buildConfigurationList = 1A3487A818DEAD6E00D021C3 /* Build configuration list for PBXProject "NumberTileGame" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1A3487A418DEAD6E00D021C3;
+			productRefGroup = 1A3487AE18DEAD6E00D021C3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1A3487AC18DEAD6E00D021C3 /* NumberTileGame */,
+				1A3487D018DEAD6E00D021C3 /* NumberTileGameTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1A3487AB18DEAD6E00D021C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A3487CC18DEAD6E00D021C3 /* Images.xcassets in Resources */,
+				1A3487C418DEAD6E00D021C3 /* Main_iPhone.storyboard in Resources */,
+				1A3487BB18DEAD6E00D021C3 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A3487CF18DEAD6E00D021C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A3487DD18DEAD6E00D021C3 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1A3487A918DEAD6E00D021C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A3487C118DEAD6E00D021C3 /* F3HAppDelegate.m in Sources */,
+				1A3487BD18DEAD6E00D021C3 /* main.m in Sources */,
+				1A3487CA18DEAD6E00D021C3 /* F3HViewController.m in Sources */,
+				1A3487ED18DEAECA00D021C3 /* F3HTileView.m in Sources */,
+				1A3487EA18DEAD9500D021C3 /* F3HGameboardView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A3487CD18DEAD6E00D021C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A3487DF18DEAD6E00D021C3 /* NumberTileGameTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1A3487D718DEAD6E00D021C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1A3487AC18DEAD6E00D021C3 /* NumberTileGame */;
+			targetProxy = 1A3487D618DEAD6E00D021C3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1A3487B918DEAD6E00D021C3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1A3487BA18DEAD6E00D021C3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1A3487C218DEAD6E00D021C3 /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1A3487C318DEAD6E00D021C3 /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		1A3487DB18DEAD6E00D021C3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1A3487DC18DEAD6E00D021C3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1A3487E018DEAD6E00D021C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1A3487E118DEAD6E00D021C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1A3487E318DEAD6E00D021C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NumberTileGame/NumberTileGame-Prefix.pch";
+				INFOPLIST_FILE = "NumberTileGame/NumberTileGame-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		1A3487E418DEAD6E00D021C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NumberTileGame/NumberTileGame-Prefix.pch";
+				INFOPLIST_FILE = "NumberTileGame/NumberTileGame-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		1A3487E618DEAD6E00D021C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NumberTileGame.app/NumberTileGame";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NumberTileGame/NumberTileGame-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "NumberTileGameTests/NumberTileGameTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		1A3487E718DEAD6E00D021C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NumberTileGame.app/NumberTileGame";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NumberTileGame/NumberTileGame-Prefix.pch";
+				INFOPLIST_FILE = "NumberTileGameTests/NumberTileGameTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1A3487A818DEAD6E00D021C3 /* Build configuration list for PBXProject "NumberTileGame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A3487E018DEAD6E00D021C3 /* Debug */,
+				1A3487E118DEAD6E00D021C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1A3487E218DEAD6E00D021C3 /* Build configuration list for PBXNativeTarget "NumberTileGame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A3487E318DEAD6E00D021C3 /* Debug */,
+				1A3487E418DEAD6E00D021C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		1A3487E518DEAD6E00D021C3 /* Build configuration list for PBXNativeTarget "NumberTileGameTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A3487E618DEAD6E00D021C3 /* Debug */,
+				1A3487E718DEAD6E00D021C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1A3487A518DEAD6E00D021C3 /* Project object */;
+}
