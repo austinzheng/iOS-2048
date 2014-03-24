@@ -48,28 +48,61 @@
     self.gameboard = gameboard;
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:4 winValue:2048 delegate:self];
     
-    [model insertTileWithValue:2 atIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    [model insertTileWithValue:4 atIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]];
-    [model insertTileWithValue:4 atIndexPath:[NSIndexPath indexPathForRow:3 inSection:2]];
+//    [model insertTileWithValue:2 atIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+//    [model insertTileWithValue:4 atIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]];
+//    [model insertTileWithValue:4 atIndexPath:[NSIndexPath indexPathForRow:3 inSection:2]];
+
+    [model insertAtRandomLocationTileWithValue:2];
+    [model insertAtRandomLocationTileWithValue:2];
     
     self.model = model;
     
 }
 
 - (IBAction)upButtonTapped:(id)sender {
-    [self.model performMoveInDirection:F3HMoveDirectionUp];
+    if ([self.model performMoveInDirection:F3HMoveDirectionUp]) {
+        [self followUp];
+    }
 }
 
 - (IBAction)downButtonTapped:(id)sender {
-    [self.model performMoveInDirection:F3HMoveDirectionDown];
+    if ([self.model performMoveInDirection:F3HMoveDirectionDown]) {
+        [self followUp];
+    }
 }
 
 - (IBAction)leftButtonTapped:(id)sender {
-    [self.model performMoveInDirection:F3HMoveDirectionLeft];
+    if ([self.model performMoveInDirection:F3HMoveDirectionLeft]) {
+        [self followUp];
+    }
 }
 
 - (IBAction)rightButtonTapped:(id)sender {
-    [self.model performMoveInDirection:F3HMoveDirectionRight];
+    if ([self.model performMoveInDirection:F3HMoveDirectionRight]) {
+        [self followUp];
+    }
+}
+
+- (void)followUp {
+    // This is the earliest point the user can win
+    if ([self.model userHasWon]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Victory!" message:@"You won!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }
+    else {
+        NSInteger rand = arc4random_uniform(10);
+        if (rand == 1) {
+            [self.model insertAtRandomLocationTileWithValue:4];
+        }
+        else {
+            [self.model insertAtRandomLocationTileWithValue:2];
+        }
+        // At this point, the user may lose
+        if ([self.model userHasLost]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Defeat!" message:@"You lost..." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+        }
+    }
 }
 
 

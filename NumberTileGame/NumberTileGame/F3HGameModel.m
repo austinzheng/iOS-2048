@@ -8,6 +8,14 @@
 
 #import "F3HGameModel.h"
 
+typedef enum {
+    F3HMergeTileModeEmpty = 0,
+    F3HMergeTileModeNoAction,
+    F3HMergeTileModeMove,
+    F3HMergeTileModeSingleCombine,
+    F3HMergeTileModeDoubleCombine
+} F3HMergeTileMode;
+
 @interface F3HGameModel ()
 
 @property (nonatomic, weak) id<F3HGameModelProtocol> delegate;
@@ -25,14 +33,25 @@
 + (instancetype)emptyTile;
 @end
 
-@interface F3HDestination : NSObject
-@property (nonatomic) BOOL empty;
-@property (nonatomic) BOOL finalValue;
-@property (nonatomic) NSIndexPath *firstTileOrigin;
-@property (nonatomic) NSIndexPath *secondTileOrigin;
-@property (nonatomic) BOOL isDoubleMove;
-+ (instancetype)emptyDestination;
-- (void)reset;
+@interface F3HMergeTile : NSObject
+@property (nonatomic) F3HMergeTileMode mode;
+@property (nonatomic) NSInteger originalIndexA;
+@property (nonatomic) NSInteger originalIndexB;
+@property (nonatomic) NSInteger value;
++ (instancetype)mergeTile;
+@end
+
+@interface F3HMoveOrder ()
+
++ (instancetype)singleMoveOrderWithSource:(NSInteger)source
+                              destination:(NSInteger)destination
+                                 newValue:(NSInteger)value;
+
++ (instancetype)doubleMoveOrderWithFirstSource:(NSInteger)source1
+                                  secondSource:(NSInteger)source2
+                                   destination:(NSInteger)destination
+                                      newValue:(NSInteger)value;
+
 @end
 
 @implementation F3HGameModel
@@ -47,6 +66,52 @@
     return model;
 }
 
+#pragma mark - Insertion API
+
+- (void)insertAtRandomLocationTileWithValue:(NSUInteger)value {
+    // Check if gameboard is full
+    BOOL emptySpotFound = NO;
+    for (NSInteger i=0; i<[self.gameState count]; i++) {
+        if (((F3HTile *) self.gameState[i]).empty) {
+            emptySpotFound = YES;
+            break;
+        }
+    }
+    if (!emptySpotFound) {
+        // Board is full, we will never be able to insert a tile
+        return;
+    }
+    // Yes, this could run forever. Given the size of any practical gameboard, I don't think it's likely.
+    NSInteger row = 0;
+    BOOL shouldExit = NO;
+    while (YES) {
+        row = arc4random_uniform(self.dimension);
+        // Check if row has any empty spots in column
+        for (NSInteger i=0; i<self.dimension; i++) {
+            if ([self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:i]].empty) {
+                shouldExit = YES;
+                break;
+            }
+        }
+        if (shouldExit) {
+            break;
+        }
+    }
+    NSInteger column = 0;
+    shouldExit = NO;
+    while (YES) {
+        column = arc4random_uniform(self.dimension);
+        if ([self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:column]].empty) {
+            shouldExit = YES;
+            break;
+        }
+        if (shouldExit) {
+            break;
+        }
+    }
+    [self insertTileWithValue:value atIndexPath:[NSIndexPath indexPathForRow:row inSection:column]];
+}
+
 // Insert a tile (used by the game to add new tiles to the board)
 - (void)insertTileWithValue:(NSUInteger)value
                 atIndexPath:(NSIndexPath *)path {
@@ -59,371 +124,251 @@
     [self.delegate insertTileAtIndexPath:path value:value];
 }
 
+
+#pragma mark - Movement API
+
 // Perform a user-initiated move in one of four directions
-- (void)performMoveInDirection:(F3HMoveDirection)direction {
+- (BOOL)performMoveInDirection:(F3HMoveDirection)direction {
     switch (direction) {
         case F3HMoveDirectionUp:
-            [self performUpMove];
-            break;
+            return [self performUpMove];
         case F3HMoveDirectionDown:
-            [self performDownMove];
-            break;
+            return [self performDownMove];
         case F3HMoveDirectionLeft:
-            [self performLeftMove];
-            break;
+            return [self performLeftMove];
         case F3HMoveDirectionRight:
-            [self performRightMove];
-            break;
+            return [self performRightMove];
     }
 }
 
-- (void)performUpMove {
-    NSMutableArray *destinationArray = [NSMutableArray array];
-    for (NSInteger i=0; i<self.dimension; i++) {
-        [destinationArray addObject:[F3HDestination emptyDestination]];
-    }
+- (BOOL)performUpMove {
+    BOOL atLeastOneMove = NO;
     
-    // Examine each column at a time
-    for (NSInteger column=0; column<self.dimension; column++) {
-        // Examine each row in a given column
-        for (NSInteger row=1; row<self.dimension; row++) {
-            // Get the current tile
-            NSIndexPath *originalPath = [NSIndexPath indexPathForRow:row inSection:column];
-            F3HTile *tile = [self tileForIndexPath:originalPath];
-            if (tile.empty) continue;
-            
-            // Move the tile up as far as possible
-            NSInteger newRow = row; // The new row to move the tile to, if any
-            BOOL mergeNeeded = NO;
-            for (NSInteger checkingRow = row-1; checkingRow >= 0; checkingRow--) {
-                F3HTile *checkingTile = [self tileForIndexPath:[NSIndexPath indexPathForRow:checkingRow inSection:column]];
-                if (checkingTile.empty) {
-                    // The current space is empty. It may be a candidate for moving the tile
-                    newRow = checkingRow;
-                }
-                else if (checkingTile.value == tile.value) {
-                    mergeNeeded = YES;
-                    // The current space is occupied, but has the same value. We must merge into this tile
-                    newRow = checkingRow;
-                    // Make a new destination object
-                    F3HDestination *dest = destinationArray[checkingRow];
-                    if (dest.empty) {
-                        dest.empty = NO;
-                        dest.isDoubleMove = NO;
-                        dest.firstTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                        dest.secondTileOrigin = nil;
-                    }
-                    else {
-                        // The tile here was moved by an earlier iteration. We need to perform a double merge.
-                        dest.isDoubleMove = YES;
-                        dest.secondTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                    }
-                    dest.finalValue = tile.value * 2;
-                    // Update board state
-                    tile.empty = YES;
-                    checkingTile.empty = NO;
-                    checkingTile.value = tile.value * 2;
-                    break;
-                }
-            }
-            if (!mergeNeeded && newRow != row) {
-                NSAssert(((F3HDestination *)destinationArray[newRow]).empty, @"Logic error: non-empty destination when moving tile without merge");
-                F3HDestination *dest = destinationArray[newRow];
-                dest.empty = NO;
-                dest.isDoubleMove = NO;
-                dest.firstTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                dest.secondTileOrigin = nil;
-                dest.finalValue = tile.value;
-                // Update board state
-                tile.empty = YES;
-                F3HTile *newTile = [self tileForIndexPath:[NSIndexPath indexPathForRow:newRow inSection:column]];
-                newTile.empty = NO;
-                newTile.value = tile.value;
-            }
+    // Examine each column, left to right ([]-->[]-->[])
+    for (NSInteger column = 0; column<self.dimension; column++) {
+        NSMutableArray *thisColumnTiles = [NSMutableArray arrayWithCapacity:self.dimension];
+        for (NSInteger row = 0; row<self.dimension; row++) {
+            [thisColumnTiles addObject:[self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:column]]];
         }
-        
-        // Execute all moves
-        for (NSInteger i=self.dimension-1; i>=0; i--) {
-            F3HDestination *destination = destinationArray[i];
-            if (!destination.empty) {
-                if (destination.isDoubleMove) {
-                    [self.delegate moveTileOne:destination.firstTileOrigin
-                                       tileTwo:destination.secondTileOrigin
-                                   toIndexPath:[NSIndexPath indexPathForRow:i inSection:column]
-                                      newValue:destination.finalValue];
+        NSArray *ordersArray = [self mergeGroup:thisColumnTiles];
+        if ([ordersArray count] > 0) {
+            atLeastOneMove = YES;
+            for (NSInteger i=0; i<[ordersArray count]; i++) {
+                F3HMoveOrder *order = ordersArray[i];
+                if (order.doubleMove) {
+                    // Update internal model
+                    NSIndexPath *source1Path = [NSIndexPath indexPathForRow:order.source1 inSection:column];
+                    NSIndexPath *source2Path = [NSIndexPath indexPathForRow:order.source2 inSection:column];
+                    NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:order.destination inSection:column];
+                    
+                    F3HTile *source1Tile = [self tileForIndexPath:source1Path];
+                    source1Tile.empty = YES;
+                    F3HTile *source2Tile = [self tileForIndexPath:source2Path];
+                    source2Tile.empty = YES;
+                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    destinationTile.empty = NO;
+                    destinationTile.value = order.value;
+                    
+                    // Update delegate
+                    [self.delegate moveTileOne:source1Path
+                                       tileTwo:source2Path
+                                   toIndexPath:destinationPath
+                                      newValue:order.value];
                 }
                 else {
-                    [self.delegate moveTileFromIndexPath:destination.firstTileOrigin
-                                             toIndexPath:[NSIndexPath indexPathForRow:i inSection:column]
-                                                newValue:destination.finalValue];
+                    // Update internal model
+                    NSIndexPath *sourcePath = [NSIndexPath indexPathForRow:order.source1 inSection:column];
+                    NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:order.destination inSection:column];
+                    
+                    F3HTile *sourceTile = [self tileForIndexPath:sourcePath];
+                    sourceTile.empty = YES;
+                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    destinationTile.empty = NO;
+                    destinationTile.value = order.value;
+                    
+                    // Update delegate
+                    [self.delegate moveTileFromIndexPath:sourcePath
+                                             toIndexPath:destinationPath
+                                                newValue:order.value];
                 }
             }
-            // Reset the array
-            [destinationArray[i] reset];
         }
     }
+    return atLeastOneMove;
 }
 
-- (void)performDownMove {
-    NSMutableArray *destinationArray = [NSMutableArray array];
-    for (NSInteger i=0; i<self.dimension; i++) {
-        [destinationArray addObject:[F3HDestination emptyDestination]];
-    }
+- (BOOL)performDownMove {
+    BOOL atLeastOneMove = NO;
     
-    // Examine each column at a time
-    for (NSInteger column=0; column<self.dimension; column++) {
-        // Examine each row in a given column
-        for (NSInteger row=(self.dimension-2); row >= 0; row--) {
-            // Get the current tile
-            NSIndexPath *originalPath = [NSIndexPath indexPathForRow:row inSection:column];
-            F3HTile *tile = [self tileForIndexPath:originalPath];
-            if (tile.empty) continue;
-            
-            // Move the tile down as far as possible
-            NSInteger newRow = row; // The new row to move the tile to, if any
-            BOOL mergeNeeded = NO;
-            for (NSInteger checkingRow = row+1; checkingRow < self.dimension; checkingRow++) {
-                F3HTile *checkingTile = [self tileForIndexPath:[NSIndexPath indexPathForRow:checkingRow inSection:column]];
-                if (checkingTile.empty) {
-                    // The current space is empty. It may be a candidate for moving the tile
-                    newRow = checkingRow;
-                }
-                else if (checkingTile.value == tile.value) {
-                    mergeNeeded = YES;
-                    // The current space is occupied, but has the same value. We must merge into this tile
-                    newRow = checkingRow;
-                    // Make a new destination object
-                    F3HDestination *dest = destinationArray[checkingRow];
-                    if (dest.empty) {
-                        dest.empty = NO;
-                        dest.isDoubleMove = NO;
-                        dest.firstTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                        dest.secondTileOrigin = nil;
-                    }
-                    else {
-                        // The tile here was moved by an earlier iteration. We need to perform a double merge.
-                        dest.isDoubleMove = YES;
-                        dest.secondTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                    }
-                    dest.finalValue = tile.value * 2;
-                    // Update board state
-                    tile.empty = YES;
-                    checkingTile.empty = NO;
-                    checkingTile.value = tile.value * 2;
-                    break;
-                }
-            }
-            if (!mergeNeeded && newRow != row) {
-                NSAssert(((F3HDestination *)destinationArray[newRow]).empty, @"Logic error: non-empty destination when moving tile without merge");
-                F3HDestination *dest = destinationArray[newRow];
-                dest.empty = NO;
-                dest.isDoubleMove = NO;
-                dest.firstTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                dest.secondTileOrigin = nil;
-                dest.finalValue = tile.value;
-                // Update board state
-                tile.empty = YES;
-                F3HTile *newTile = [self tileForIndexPath:[NSIndexPath indexPathForRow:newRow inSection:column]];
-                newTile.empty = NO;
-                newTile.value = tile.value;
-            }
+    // Examine each column, left to right ([]-->[]-->[])
+    for (NSInteger column = 0; column<self.dimension; column++) {
+        NSMutableArray *thisColumnTiles = [NSMutableArray arrayWithCapacity:self.dimension];
+        for (NSInteger row = (self.dimension - 1); row >= 0; row--) {
+            [thisColumnTiles addObject:[self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:column]]];
         }
-        
-        // Execute all moves
-        for (NSInteger i=0; i<self.dimension; i++) {
-            F3HDestination *destination = destinationArray[i];
-            if (!destination.empty) {
-                if (destination.isDoubleMove) {
-                    [self.delegate moveTileOne:destination.firstTileOrigin
-                                       tileTwo:destination.secondTileOrigin
-                                   toIndexPath:[NSIndexPath indexPathForRow:i inSection:column]
-                                      newValue:destination.finalValue];
+        NSArray *ordersArray = [self mergeGroup:thisColumnTiles];
+        if ([ordersArray count] > 0) {
+            atLeastOneMove = YES;
+            for (NSInteger i=0; i<[ordersArray count]; i++) {
+                F3HMoveOrder *order = ordersArray[i];
+                NSInteger dim = self.dimension - 1;
+                if (order.doubleMove) {
+                    // Update internal model
+                    NSIndexPath *source1Path = [NSIndexPath indexPathForRow:(dim - order.source1) inSection:column];
+                    NSIndexPath *source2Path = [NSIndexPath indexPathForRow:(dim - order.source2) inSection:column];
+                    NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:(dim - order.destination) inSection:column];
+                    
+                    F3HTile *source1Tile = [self tileForIndexPath:source1Path];
+                    source1Tile.empty = YES;
+                    F3HTile *source2Tile = [self tileForIndexPath:source2Path];
+                    source2Tile.empty = YES;
+                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    destinationTile.empty = NO;
+                    destinationTile.value = order.value;
+                    
+                    // Update delegate
+                    [self.delegate moveTileOne:source1Path
+                                       tileTwo:source2Path
+                                   toIndexPath:destinationPath
+                                      newValue:order.value];
                 }
                 else {
-                    [self.delegate moveTileFromIndexPath:destination.firstTileOrigin
-                                             toIndexPath:[NSIndexPath indexPathForRow:i inSection:column]
-                                                newValue:destination.finalValue];
+                    // Update internal model
+                    NSIndexPath *sourcePath = [NSIndexPath indexPathForRow:(dim - order.source1) inSection:column];
+                    NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:(dim - order.destination) inSection:column];
+                    
+                    F3HTile *sourceTile = [self tileForIndexPath:sourcePath];
+                    sourceTile.empty = YES;
+                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    destinationTile.empty = NO;
+                    destinationTile.value = order.value;
+                    
+                    // Update delegate
+                    [self.delegate moveTileFromIndexPath:sourcePath
+                                             toIndexPath:destinationPath
+                                                newValue:order.value];
                 }
             }
-            // Reset the array
-            [destinationArray[i] reset];
         }
     }
+    return atLeastOneMove;
 }
 
-- (void)performLeftMove {
-    NSMutableArray *destinationArray = [NSMutableArray array];
-    for (NSInteger i=0; i<self.dimension; i++) {
-        [destinationArray addObject:[F3HDestination emptyDestination]];
-    }
+- (BOOL)performLeftMove {
+    BOOL atLeastOneMove = NO;
     
-    // Examine each row at a time
-    for (NSInteger row=0; row<self.dimension; row++) {
-        // Examine each column in a given row
-        for (NSInteger column=1; column<self.dimension; column++) {
-            // Get the current tile
-            NSIndexPath *originalPath = [NSIndexPath indexPathForRow:row inSection:column];
-            F3HTile *tile = [self tileForIndexPath:originalPath];
-            if (tile.empty) continue;
-            
-            // Move the tile to the left as much as possible
-            NSInteger newColumn = column; // The new row to move the tile to, if any
-            BOOL mergeNeeded = NO;
-            for (NSInteger checkingColumn = column-1; checkingColumn >= 0; checkingColumn--) {
-                F3HTile *checkingTile = [self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:checkingColumn]];
-                if (checkingTile.empty) {
-                    // The current space is empty. It may be a candidate for moving the tile
-                    newColumn = checkingColumn;
-                }
-                else if (checkingTile.value == tile.value) {
-                    mergeNeeded = YES;
-                    // The current space is occupied, but has the same value. We must merge into this tile
-                    newColumn = checkingColumn;
-                    // Make a new destination object
-                    F3HDestination *dest = destinationArray[checkingColumn];
-                    if (dest.empty) {
-                        dest.empty = NO;
-                        dest.isDoubleMove = NO;
-                        dest.firstTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                        dest.secondTileOrigin = nil;
-                    }
-                    else {
-                        // The tile here was moved by an earlier iteration. We need to perform a double merge.
-                        dest.isDoubleMove = YES;
-                        dest.secondTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                    }
-                    dest.finalValue = tile.value * 2;
-                    // Update board state
-                    tile.empty = YES;
-                    checkingTile.empty = NO;
-                    checkingTile.value = tile.value * 2;
-                    break;
-                }
-            }
-            if (!mergeNeeded && newColumn != column) {
-                NSAssert(((F3HDestination *)destinationArray[newColumn]).empty, @"Logic error: non-empty destination when moving tile without merge");
-                F3HDestination *dest = destinationArray[newColumn];
-                dest.empty = NO;
-                dest.isDoubleMove = NO;
-                dest.firstTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                dest.secondTileOrigin = nil;
-                dest.finalValue = tile.value;
-                // Update board state
-                tile.empty = YES;
-                F3HTile *newTile = [self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:newColumn]];
-                newTile.empty = NO;
-                newTile.value = tile.value;
-            }
+    // Examine each row, up to down ([TTT] --> [---] --> [____])
+    for (NSInteger row = 0; row<self.dimension; row++) {
+        NSMutableArray *thisRowTiles = [NSMutableArray arrayWithCapacity:self.dimension];
+        for (NSInteger column = 0; column<self.dimension; column++) {
+            [thisRowTiles addObject:[self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:column]]];
         }
-        
-        // Execute all moves
-        for (NSInteger i=self.dimension-1; i>=0; i--) {
-            F3HDestination *destination = destinationArray[i];
-            if (!destination.empty) {
-                if (destination.isDoubleMove) {
-                    [self.delegate moveTileOne:destination.firstTileOrigin
-                                       tileTwo:destination.secondTileOrigin
-                                   toIndexPath:[NSIndexPath indexPathForRow:row inSection:i]
-                                      newValue:destination.finalValue];
+        NSArray *ordersArray = [self mergeGroup:thisRowTiles];
+        if ([ordersArray count] > 0) {
+            atLeastOneMove = YES;
+            for (NSInteger i=0; i<[ordersArray count]; i++) {
+                F3HMoveOrder *order = ordersArray[i];
+                if (order.doubleMove) {
+                    // Update internal model
+                    NSIndexPath *source1Path = [NSIndexPath indexPathForRow:row inSection:order.source1];
+                    NSIndexPath *source2Path = [NSIndexPath indexPathForRow:row inSection:order.source2];
+                    NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:row inSection:order.destination];
+                    
+                    F3HTile *source1Tile = [self tileForIndexPath:source1Path];
+                    source1Tile.empty = YES;
+                    F3HTile *source2Tile = [self tileForIndexPath:source2Path];
+                    source2Tile.empty = YES;
+                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    destinationTile.empty = NO;
+                    destinationTile.value = order.value;
+                    
+                    // Update delegate
+                    [self.delegate moveTileOne:source1Path
+                                       tileTwo:source2Path
+                                   toIndexPath:destinationPath
+                                      newValue:order.value];
                 }
                 else {
-                    [self.delegate moveTileFromIndexPath:destination.firstTileOrigin
-                                             toIndexPath:[NSIndexPath indexPathForRow:row inSection:i]
-                                                newValue:destination.finalValue];
+                    // Update internal model
+                    NSIndexPath *sourcePath = [NSIndexPath indexPathForRow:row inSection:order.source1];
+                    NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:row inSection:order.destination];
+                    
+                    F3HTile *sourceTile = [self tileForIndexPath:sourcePath];
+                    sourceTile.empty = YES;
+                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    destinationTile.empty = NO;
+                    destinationTile.value = order.value;
+                    
+                    // Update delegate
+                    [self.delegate moveTileFromIndexPath:sourcePath
+                                             toIndexPath:destinationPath
+                                                newValue:order.value];
                 }
             }
-            // Reset the array
-            [destinationArray[i] reset];
         }
     }
+    return atLeastOneMove;
 }
 
-- (void)performRightMove {
-    NSMutableArray *destinationArray = [NSMutableArray array];
-    for (NSInteger i=0; i<self.dimension; i++) {
-        [destinationArray addObject:[F3HDestination emptyDestination]];
-    }
+- (BOOL)performRightMove {
+    BOOL atLeastOneMove = NO;
     
-    // Examine each row at a time
-    for (NSInteger row=0; row<self.dimension; row++) {
-        // Examine each column in a given row
-        for (NSInteger column=(self.dimension - 2); column >= 0; column--) {
-            // Get the current tile
-            NSIndexPath *originalPath = [NSIndexPath indexPathForRow:row inSection:column];
-            F3HTile *tile = [self tileForIndexPath:originalPath];
-            if (tile.empty) continue;
-            
-            // Move the tile to the left as much as possible
-            NSInteger newColumn = column; // The new row to move the tile to, if any
-            BOOL mergeNeeded = NO;
-            for (NSInteger checkingColumn = column+1; checkingColumn < self.dimension; checkingColumn++) {
-                F3HTile *checkingTile = [self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:checkingColumn]];
-                if (checkingTile.empty) {
-                    // The current space is empty. It may be a candidate for moving the tile
-                    newColumn = checkingColumn;
-                }
-                else if (checkingTile.value == tile.value) {
-                    mergeNeeded = YES;
-                    // The current space is occupied, but has the same value. We must merge into this tile
-                    newColumn = checkingColumn;
-                    // Make a new destination object
-                    F3HDestination *dest = destinationArray[checkingColumn];
-                    if (dest.empty) {
-                        dest.empty = NO;
-                        dest.isDoubleMove = NO;
-                        dest.firstTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                        dest.secondTileOrigin = nil;
-                    }
-                    else {
-                        // The tile here was moved by an earlier iteration. We need to perform a double merge.
-                        dest.isDoubleMove = YES;
-                        dest.secondTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                    }
-                    dest.finalValue = tile.value * 2;
-                    // Update board state
-                    tile.empty = YES;
-                    checkingTile.empty = NO;
-                    checkingTile.value = tile.value * 2;
-                    break;
-                }
-            }
-            if (!mergeNeeded && newColumn != column) {
-                NSAssert(((F3HDestination *)destinationArray[newColumn]).empty, @"Logic error: non-empty destination when moving tile without merge");
-                F3HDestination *dest = destinationArray[newColumn];
-                dest.empty = NO;
-                dest.isDoubleMove = NO;
-                dest.firstTileOrigin = [NSIndexPath indexPathForRow:row inSection:column];
-                dest.secondTileOrigin = nil;
-                dest.finalValue = tile.value;
-                // Update board state
-                tile.empty = YES;
-                F3HTile *newTile = [self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:newColumn]];
-                newTile.empty = NO;
-                newTile.value = tile.value;
-            }
+    // Examine each row, up to down ([TTT] --> [---] --> [____])
+    for (NSInteger row = 0; row<self.dimension; row++) {
+        NSMutableArray *thisRowTiles = [NSMutableArray arrayWithCapacity:self.dimension];
+        for (NSInteger column = (self.dimension - 1); column >= 0; column--) {
+            [thisRowTiles addObject:[self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:column]]];
         }
-        
-        // Execute all moves
-        for (NSInteger i=0; i<self.dimension; i++) {
-            F3HDestination *destination = destinationArray[i];
-            if (!destination.empty) {
-                if (destination.isDoubleMove) {
-                    [self.delegate moveTileOne:destination.firstTileOrigin
-                                       tileTwo:destination.secondTileOrigin
-                                   toIndexPath:[NSIndexPath indexPathForRow:row inSection:i]
-                                      newValue:destination.finalValue];
+        NSArray *ordersArray = [self mergeGroup:thisRowTiles];
+        if ([ordersArray count] > 0) {
+            NSInteger dim = self.dimension - 1;
+            atLeastOneMove = YES;
+            for (NSInteger i=0; i<[ordersArray count]; i++) {
+                F3HMoveOrder *order = ordersArray[i];
+                if (order.doubleMove) {
+                    // Update internal model
+                    NSIndexPath *source1Path = [NSIndexPath indexPathForRow:row inSection:(dim - order.source1)];
+                    NSIndexPath *source2Path = [NSIndexPath indexPathForRow:row inSection:(dim - order.source2)];
+                    NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:row inSection:(dim - order.destination)];
+                    
+                    F3HTile *source1Tile = [self tileForIndexPath:source1Path];
+                    source1Tile.empty = YES;
+                    F3HTile *source2Tile = [self tileForIndexPath:source2Path];
+                    source2Tile.empty = YES;
+                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    destinationTile.empty = NO;
+                    destinationTile.value = order.value;
+                    
+                    // Update delegate
+                    [self.delegate moveTileOne:source1Path
+                                       tileTwo:source2Path
+                                   toIndexPath:destinationPath
+                                      newValue:order.value];
                 }
                 else {
-                    [self.delegate moveTileFromIndexPath:destination.firstTileOrigin
-                                             toIndexPath:[NSIndexPath indexPathForRow:row inSection:i]
-                                                newValue:destination.finalValue];
+                    // Update internal model
+                    NSIndexPath *sourcePath = [NSIndexPath indexPathForRow:row inSection:(dim - order.source1)];
+                    NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:row inSection:(dim - order.destination)];
+                    
+                    F3HTile *sourceTile = [self tileForIndexPath:sourcePath];
+                    sourceTile.empty = YES;
+                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    destinationTile.empty = NO;
+                    destinationTile.value = order.value;
+                    
+                    // Update delegate
+                    [self.delegate moveTileFromIndexPath:sourcePath
+                                             toIndexPath:destinationPath
+                                                newValue:order.value];
                 }
             }
-            // Reset the array
-            [destinationArray[i] reset];
         }
     }
+    return atLeastOneMove;
 }
+
+
+#pragma mark - Game State API
 
 - (BOOL)userHasLost {
     for (NSInteger i=0; i<[self.gameState count]; i++) {
@@ -459,6 +404,9 @@
     return NO;
 }
 
+
+#pragma mark - Private Methods
+
 - (F3HTile *)tileForIndexPath:(NSIndexPath *)indexPath {
     NSInteger idx = (indexPath.row*self.dimension + indexPath.section);
     if (idx >= [self.gameState count]) {
@@ -485,7 +433,209 @@
     return _gameState;
 }
 
+// Merge some items to the left
+// "Group" is an array of tile objects
+- (NSArray *)mergeGroup:(NSArray *)group {
+    NSInteger ctr = 0;
+    // STEP 1: collapse all tiles (remove any interstital space)
+    // e.g. |[2] [ ] [ ] [4]| becomes [[2] [4]|
+    // At this point, tiles either move or don't move, and their value remains the same
+    NSMutableArray *stack1 = [NSMutableArray array];
+    for (NSInteger i=0; i<self.dimension; i++) {
+        F3HTile *tile = group[i];
+        if (tile.empty) {
+            // Don't do anything with empty tiles
+            continue;
+        }
+        F3HMergeTile *mergeTile = [F3HMergeTile mergeTile];
+        mergeTile.originalIndexA = i;
+        mergeTile.value = tile.value;
+        if (i == ctr) {
+            mergeTile.mode = F3HMergeTileModeNoAction;
+        }
+        else {
+            mergeTile.mode = F3HMergeTileModeMove;
+        }
+        [stack1 addObject:mergeTile];
+        ctr++;
+    }
+    if ([stack1 count] == 0) {
+        // Nothing to do, no tiles in this group
+        return nil;
+    }
+    else if ([stack1 count] == 1) {
+        // Only one tile in this group. Either it moved, or it didn't.
+        if (((F3HMergeTile *)stack1[0]).mode == F3HMergeTileModeMove) {
+            // Tile moved. Add one move order.
+            F3HMergeTile *mTile = (F3HMergeTile *)stack1[0];
+            return @[[F3HMoveOrder singleMoveOrderWithSource:mTile.originalIndexA
+                                                 destination:0
+                                                    newValue:mTile.value]];
+        }
+        else {
+            return nil;
+        }
+    }
+    
+    // STEP 2: starting from the left, and moving to the right, collapse tiles
+    // e.g. |[8][8][4][2][2]| should become |[16][4][4]|
+    // e.g. |[2][2][2]| should become |[4][2]|
+    // At this point, tiles may become the subject of a single or double merge
+    ctr = 0;
+    BOOL priorMergeHasHappened = NO;
+    NSMutableArray *stack2 = [NSMutableArray array];
+    while (ctr < ([stack1 count] - 1)) {
+        F3HMergeTile *t1 = (F3HMergeTile *)stack1[ctr];
+        F3HMergeTile *t2 = (F3HMergeTile *)stack1[ctr+1];
+        if (t1.value == t2.value) {
+            // First: update t1 and t2's modes
+            NSAssert(t1.mode != F3HMergeTileModeSingleCombine && t2.mode != F3HMergeTileModeSingleCombine
+                     && t1.mode != F3HMergeTileModeDoubleCombine && t2.mode != F3HMergeTileModeDoubleCombine,
+                     @"Should not be able to get in a state where already-combined tiles are recombined");
+            
+            // Merge the two
+            if (t1.mode == F3HMergeTileModeNoAction && !priorMergeHasHappened) {
+                priorMergeHasHappened = YES;
+                // t1 didn't move, but t2 merged onto t1.
+                F3HMergeTile *newT = [F3HMergeTile mergeTile];
+                newT.mode = F3HMergeTileModeSingleCombine;
+                newT.originalIndexA = t2.originalIndexA;
+                newT.value = t1.value * 2;
+                [stack2 addObject:newT];
+            }
+            else {
+                // t1 moved earlier.
+                F3HMergeTile *newT = [F3HMergeTile mergeTile];
+                newT.mode = F3HMergeTileModeDoubleCombine;
+                newT.originalIndexA = t1.originalIndexA;
+                newT.originalIndexB = t2.originalIndexA;
+                newT.value = t1.value * 2;
+                [stack2 addObject:newT];
+            }
+            ctr += 2;
+        }
+        else {
+            // t1 is pushed onto stack2, as either a move or a no-op. The pointer is incremented
+            [stack2 addObject:t1];
+            if ([stack2 count] - 1 != ctr) {
+                t1.mode = F3HMergeTileModeMove;
+            }
+            ctr++;
+        }
+        // Addendum:
+        if (ctr == [stack1 count] - 1) {
+            // We're at the end of stack1, and need to add t2 as well as t1.
+            F3HMergeTile *item = stack1[ctr];
+            [stack2 addObject:item];
+            if ([stack2 count] - 1 != ctr) {
+                item.mode = F3HMergeTileModeMove;
+            }
+        }
+    }
+    
+    // STEP 3: create move orders for each mergeTile that did change this round
+    NSMutableArray *stack3 = [NSMutableArray new];
+    for (NSInteger i=0; i<[stack2 count]; i++) {
+        F3HMergeTile *mTile = stack2[i];
+        switch (mTile.mode) {
+            case F3HMergeTileModeEmpty:
+            case F3HMergeTileModeNoAction:
+                continue;
+            case F3HMergeTileModeMove:
+            case F3HMergeTileModeSingleCombine:
+                // Single combine
+                [stack3 addObject:[F3HMoveOrder singleMoveOrderWithSource:mTile.originalIndexA
+                                                              destination:i
+                                                                 newValue:mTile.value]];
+                break;
+            case F3HMergeTileModeDoubleCombine:
+                // Double combine
+                [stack3 addObject:[F3HMoveOrder doubleMoveOrderWithFirstSource:mTile.originalIndexA
+                                                                  secondSource:mTile.originalIndexB
+                                                                   destination:i
+                                                                      newValue:mTile.value]];
+                break;
+        }
+    }
+    // Return the finalized array
+    return [NSArray arrayWithArray:stack3];
+}
+
 @end
+
+
+#pragma mark - F3HMergeTile
+
+@implementation F3HMergeTile
+
++ (instancetype)mergeTile {
+    return [[self class] new];
+}
+
+- (NSString *)description {
+    NSString *modeStr;
+    switch (self.mode) {
+        case F3HMergeTileModeEmpty:
+            modeStr = @"Empty";
+            break;
+        case F3HMergeTileModeNoAction:
+            modeStr = @"NoAction";
+            break;
+        case F3HMergeTileModeMove:
+            modeStr = @"Move";
+            break;
+        case F3HMergeTileModeSingleCombine:
+            modeStr = @"SingleCombine";
+            break;
+        case F3HMergeTileModeDoubleCombine:
+            modeStr = @"DoubleCombine";
+    }
+    return [NSString stringWithFormat:@"MergeTile (mode: %@, source1: %d, source2: %d, value: %d)",
+            modeStr, self.originalIndexA, self.originalIndexB, self.value];
+}
+
+@end
+
+
+#pragma mark - F3HMoveOrder
+
+@implementation F3HMoveOrder
+
++ (instancetype)singleMoveOrderWithSource:(NSInteger)source destination:(NSInteger)destination newValue:(NSInteger)value {
+    F3HMoveOrder *order = [[self class] new];
+    order.doubleMove = NO;
+    order.source1 = source;
+    order.destination = destination;
+    order.value = value;
+    return order;
+}
+
++ (instancetype)doubleMoveOrderWithFirstSource:(NSInteger)source1
+                                  secondSource:(NSInteger)source2
+                                   destination:(NSInteger)destination
+                                      newValue:(NSInteger)value {
+    F3HMoveOrder *order = [[self class] new];
+    order.doubleMove = YES;
+    order.source1 = source1;
+    order.source2 = source2;
+    order.destination = destination;
+    order.value = value;
+    return order;
+}
+
+- (NSString *)description {
+    if (self.doubleMove) {
+        return [NSString stringWithFormat:@"MoveOrder (double, source1: %d, source2: %d, destination: %d, value: %d)",
+                self.source1, self.source2, self.destination, self.value];
+    }
+    return [NSString stringWithFormat:@"MoveOrder (single, source: %d, destination: %d, value: %d)",
+            self.source1, self.destination, self.value];
+}
+
+@end
+
+
+#pragma mark - F3HTile
 
 // Helper class
 @implementation F3HTile
@@ -502,39 +652,6 @@
         return @"Tile (empty)";
     }
     return [NSString stringWithFormat:@"Tile (value: %d)", self.value];
-}
-
-@end
-
-@implementation F3HDestination
-
-+ (instancetype)emptyDestination {
-    F3HDestination *destination = [[self class] new];
-    [destination reset];
-    return destination;
-}
-
-- (void)reset {
-    self.empty = YES;
-    self.firstTileOrigin = nil;
-    self.secondTileOrigin = nil;
-    self.isDoubleMove = NO;
-    self.finalValue = 0;
-}
-
-- (NSString *)description {
-    if (self.empty) {
-        return @"Destination (empty)";
-    }
-    else if (self.isDoubleMove) {
-        return [NSString stringWithFormat:@"Double move destination (source 1: row %d, column %d; source 2: row %d, column %d)",
-                self.firstTileOrigin.row, self.firstTileOrigin.section,
-                self.secondTileOrigin.row, self.secondTileOrigin.section];
-    }
-    else {
-        return [NSString stringWithFormat:@"Single move destination (source: row %d, column %d)",
-                self.firstTileOrigin.row, self.firstTileOrigin.section];
-    }
 }
 
 @end

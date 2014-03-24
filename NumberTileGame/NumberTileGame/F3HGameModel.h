@@ -37,9 +37,26 @@ typedef enum {
                               winValue:(NSUInteger)value
                               delegate:(id<F3HGameModelProtocol>)delegate;
 
+- (void)insertAtRandomLocationTileWithValue:(NSUInteger)value;
+
 - (void)insertTileWithValue:(NSUInteger)value
                 atIndexPath:(NSIndexPath *)path;
 
-- (void)performMoveInDirection:(F3HMoveDirection)direction;
+- (BOOL)performMoveInDirection:(F3HMoveDirection)direction;
 
+- (BOOL)userHasLost;
+- (BOOL)userHasWon;
+
+#pragma mark - Test
+
+- (NSArray *)mergeGroup:(NSArray *)group;
+
+@end
+
+@interface F3HMoveOrder : NSObject
+@property (nonatomic) NSInteger source1;
+@property (nonatomic) NSInteger source2;
+@property (nonatomic) NSInteger destination;
+@property (nonatomic) BOOL doubleMove;
+@property (nonatomic) NSInteger value;
 @end

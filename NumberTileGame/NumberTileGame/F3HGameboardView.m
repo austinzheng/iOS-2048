@@ -80,6 +80,7 @@
 // Insert a tile, with the popping animation
 - (void)insertTileAtIndexPath:(NSIndexPath *)path
                     withValue:(NSUInteger)value {
+    NSLog(@"Inserting tile at row %d, column %d", path.row, path.section);
     if (!path
         || path.row >= self.dimension
         || path.section >= self.dimension
@@ -104,6 +105,8 @@
             tileTwo:(NSIndexPath *)startB
         toIndexPath:(NSIndexPath *)end
           withValue:(NSUInteger)value {
+    NSLog(@"Moving tiles at row %d, column %d and row %d, column %d to destination row %d, column %d",
+          startA.row, startA.section, startB.row, startB.section, end.row, end.section);
     if (!startA || !startB || !self.boardTiles[startA] || !self.boardTiles[startB]
         || end.row >= self.dimension
         || end.section >= self.dimension) {
@@ -119,6 +122,11 @@
     finalFrame.origin.x = x;
     finalFrame.origin.y = y;
     
+    // Don't perform update after animation
+    [self.boardTiles removeObjectForKey:startA];
+    [self.boardTiles removeObjectForKey:startB];
+    self.boardTiles[end] = tileA;
+
     [UIView animateWithDuration:(PER_SQUARE_SLIDE_DURATION*1)
                      animations:^{
                          tileA.frame = finalFrame;
@@ -126,9 +134,6 @@
                      }
                      completion:^(BOOL finished) {
                          tileA.tileValue = value;
-                         [self.boardTiles removeObjectForKey:startA];
-                         [self.boardTiles removeObjectForKey:startB];
-                         self.boardTiles[end] = tileA;
                          [tileB removeFromSuperview];
                      }];
 }
@@ -137,6 +142,8 @@
 - (void)moveTileAtIndexPath:(NSIndexPath *)start
                 toIndexPath:(NSIndexPath *)end
                   withValue:(NSUInteger)value {
+    NSLog(@"Moving tile at row %d, column %d to destination row %d, column %d",
+          start.row, start.section, end.row, end.section);
     if (!start || !end || !self.boardTiles[start]
         || end.row >= self.dimension
         || end.section >= self.dimension) {
@@ -165,14 +172,16 @@
     finalFrame.origin.x = x;
     finalFrame.origin.y = y;
     
+    // Update board state
+    [self.boardTiles removeObjectForKey:start];
+    self.boardTiles[end] = tile;
+    
     [UIView animateWithDuration:(PER_SQUARE_SLIDE_DURATION*1)
                      animations:^{
                          tile.frame = finalFrame;
                      }
                      completion:^(BOOL finished) {
                          tile.tileValue = value;
-                         [self.boardTiles removeObjectForKey:start];
-                         self.boardTiles[end] = tile;
                          [endTile removeFromSuperview];
                      }];
 }
