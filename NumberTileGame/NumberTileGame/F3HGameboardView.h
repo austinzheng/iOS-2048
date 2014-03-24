@@ -19,6 +19,11 @@
 - (void)insertTileAtIndexPath:(NSIndexPath *)path
                     withValue:(NSUInteger)value;
 
+- (void)moveTileOne:(NSIndexPath *)startA
+            tileTwo:(NSIndexPath *)startB
+        toIndexPath:(NSIndexPath *)end
+          withValue:(NSUInteger)value;
+
 - (void)moveTileAtIndexPath:(NSIndexPath *)start
                 toIndexPath:(NSIndexPath *)end
                   withValue:(NSUInteger)value;

@@ -8,6 +8,7 @@
 
 #import "F3HGameboardView.h"
 
+#import <QuartzCore/QuartzCore.h>
 #import "F3HTileView.h"
 #import "F3HTileColorProvider.h"
 
@@ -18,7 +19,7 @@
 @property (nonatomic, strong) NSMutableDictionary *boardTiles;
 
 @property (nonatomic) NSUInteger dimension;
-@property (nonatomic) CGFloat tileSideLength;   // TODO
+@property (nonatomic) CGFloat tileSideLength;
 
 @property (nonatomic) CGFloat padding;
 
@@ -47,6 +48,13 @@
     return view;
 }
 
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (!self) return nil;
+    self.layer.cornerRadius = 5;
+    return self;
+}
+
 - (void)setupBackgroundWithBackgroundColor:(UIColor *)background
                            foregroundColor:(UIColor *)foreground {
     self.backgroundColor = background;
@@ -60,6 +68,7 @@
                                                                          yCursor,
                                                                          self.tileSideLength,
                                                                          self.tileSideLength)];
+            bkgndTile.layer.cornerRadius = 3;
             bkgndTile.backgroundColor = foreground;
             [self addSubview:bkgndTile];
             yCursor += self.padding + self.tileSideLength;
@@ -68,6 +77,7 @@
     }
 }
 
+// Insert a tile, with the popping animation
 - (void)insertTileAtIndexPath:(NSIndexPath *)path
                     withValue:(NSUInteger)value {
     if (!path
@@ -78,8 +88,8 @@
         return;
     }
     
-    CGFloat x = self.padding + path.row*(self.tileSideLength + self.padding);
-    CGFloat y = self.padding + path.section*(self.tileSideLength + self.padding);
+    CGFloat x = self.padding + path.section*(self.tileSideLength + self.padding);
+    CGFloat y = self.padding + path.row*(self.tileSideLength + self.padding);
     CGPoint position = CGPointMake(x, y);
     F3HTileView *tile = [F3HTileView tileForPosition:position
                                           sideLength:self.tileSideLength
@@ -90,37 +100,72 @@
     // TODO: Animation:
 }
 
+- (void)moveTileOne:(NSIndexPath *)startA
+            tileTwo:(NSIndexPath *)startB
+        toIndexPath:(NSIndexPath *)end
+          withValue:(NSUInteger)value {
+    if (!startA || !startB || !self.boardTiles[startA] || !self.boardTiles[startB]
+        || end.row >= self.dimension
+        || end.section >= self.dimension) {
+        NSAssert(NO, @"Invalid two-tile move and merge");
+        return;
+    }
+    F3HTileView *tileA = self.boardTiles[startA];
+    F3HTileView *tileB = self.boardTiles[startB];
+    
+    CGFloat x = self.padding + end.section*(self.tileSideLength + self.padding);
+    CGFloat y = self.padding + end.row*(self.tileSideLength + self.padding);
+    CGRect finalFrame = tileA.frame;
+    finalFrame.origin.x = x;
+    finalFrame.origin.y = y;
+    
+    [UIView animateWithDuration:(PER_SQUARE_SLIDE_DURATION*1)
+                     animations:^{
+                         tileA.frame = finalFrame;
+                         tileB.frame = finalFrame;
+                     }
+                     completion:^(BOOL finished) {
+                         tileA.tileValue = value;
+                         [self.boardTiles removeObjectForKey:startA];
+                         [self.boardTiles removeObjectForKey:startB];
+                         self.boardTiles[end] = tileA;
+                         [tileB removeFromSuperview];
+                     }];
+}
+
+// Move a single tile onto another tile (that stays stationary), merging the two
 - (void)moveTileAtIndexPath:(NSIndexPath *)start
                 toIndexPath:(NSIndexPath *)end
                   withValue:(NSUInteger)value {
     if (!start || !end || !self.boardTiles[start]
         || end.row >= self.dimension
         || end.section >= self.dimension) {
+        NSAssert(NO, @"Invalid one-tile move and merge");
         return;
     }
     F3HTileView *tile = self.boardTiles[start];
     F3HTileView *endTile = self.boardTiles[end];
-    NSInteger distance;
-    if (start.row == end.row) {
-        // Move up and down
-        distance = abs(start.section - end.section);
-    }
-    else if (start.section == end.section) {
-        // Move left and right
-        distance = abs(start.row - end.row);
-    }
-    else {
-        NSAssert(NO, @"Invalid tile movement. Tried to move from %@ to %@", start, end);
-    }
+//    NSInteger distance;
+//    if (start.row == end.row) {
+//        // Move up and down
+//        distance = abs(start.section - end.section);
+//    }
+//    else if (start.section == end.section) {
+//        // Move left and right
+//        distance = abs(start.row - end.row);
+//    }
+//    else {
+//        NSAssert(NO, @"Invalid tile movement. Tried to move from %@ to %@", start, end);
+//    }
     
     // TODO: finalize animation
-    CGFloat x = self.padding + end.row*(self.tileSideLength + self.padding);
-    CGFloat y = self.padding + end.section*(self.tileSideLength + self.padding);
+    CGFloat x = self.padding + end.section*(self.tileSideLength + self.padding);
+    CGFloat y = self.padding + end.row*(self.tileSideLength + self.padding);
     CGRect finalFrame = tile.frame;
     finalFrame.origin.x = x;
     finalFrame.origin.y = y;
     
-    [UIView animateWithDuration:(PER_SQUARE_SLIDE_DURATION*distance)
+    [UIView animateWithDuration:(PER_SQUARE_SLIDE_DURATION*1)
                      animations:^{
                          tile.frame = finalFrame;
                      }

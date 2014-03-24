@@ -46,6 +46,7 @@
     label.textAlignment = NSTextAlignmentCenter;
     [self addSubview:label];
     self.numberLabel = label;
+    self.layer.cornerRadius = 3;
     return self;
 }
 
