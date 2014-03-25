@@ -17,6 +17,8 @@
                        backgroundColor:(UIColor *)backgroundColor
                        foregroundColor:(UIColor *)foregroundColor;
 
+- (void)reset;
+
 - (void)insertTileAtIndexPath:(NSIndexPath *)path
                     withValue:(NSUInteger)value;
 
