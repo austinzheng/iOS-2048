@@ -5,9 +5,9 @@ iOS drop-in library presenting a clean-room Objective-C implementation of the ga
 
 Instructions
 ------------
-The included sample app demonstrates the game. Simply tap the button to play.
+The included sample app demonstrates the game. Simply tap the button to play. For additional fun try tweaking the parameters in F3HViewController.
 
-Create a new instance of the view controller using the provided factory method, and present it. Or manually create and configure a view and model object, and bridge them using the provided protocol.
+Create a new instance of the view controller using the provided factory method, and present it. Or manually create and configure a view and model object, and bridge them using F3HGameModelProtocol.
 
 Features
 --------
@@ -24,5 +24,6 @@ Future Features
 - Better win/lose screens than UIAlertViews
 - Swipe based controls
 - Actual library (rather than raw code hanging off a sample view controller)
+
 
 2048 by Gabriele Cirulli (http://gabrielecirulli.com/). The original game can be found at http://gabrielecirulli.github.io/2048/, as can all relevant attributions. 2048 is inspired by an iOS game called "Threes", by Asher Vollmer.
