@@ -39,7 +39,7 @@
 - (void)setupSubviews {
     if (self.moveButtonsEnabled) {
         // Large layout
-        UIButton *upButton = [[UIButton alloc] initWithFrame:CGRectMake(95, 38, 40, 40)];
+        UIButton *upButton = [[UIButton alloc] initWithFrame:CGRectMake(90, 6, 50, 60)];
         upButton.layer.cornerRadius = 4;
         upButton.backgroundColor = [UIColor grayColor];
         upButton.showsTouchWhenHighlighted = YES;
@@ -48,7 +48,7 @@
            forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:upButton];
         
-        UIButton *downButton = [[UIButton alloc] initWithFrame:CGRectMake(95, 86, 40, 40)];
+        UIButton *downButton = [[UIButton alloc] initWithFrame:CGRectMake(90, 74, 50, 60)];
         downButton.layer.cornerRadius = 4;
         downButton.backgroundColor = [UIColor grayColor];
         downButton.showsTouchWhenHighlighted = YES;
@@ -57,7 +57,7 @@
              forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:downButton];
         
-        UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(47, 62, 40, 40)];
+        UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 62, 60, 50)];
         leftButton.layer.cornerRadius = 4;
         leftButton.backgroundColor = [UIColor grayColor];
         leftButton.showsTouchWhenHighlighted = YES;
@@ -66,7 +66,7 @@
              forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:leftButton];
         
-        UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(143, 62, 40, 40)];
+        UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(150, 62, 60, 50)];
         rightButton.layer.cornerRadius = 4;
         rightButton.backgroundColor = [UIColor grayColor];
         rightButton.showsTouchWhenHighlighted = YES;

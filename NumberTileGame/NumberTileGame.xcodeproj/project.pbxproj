@@ -273,6 +273,9 @@
 				CLASSPREFIX = F3H;
 				LastUpgradeCheck = 0510;
 				TargetAttributes = {
+					1A3487AC18DEAD6E00D021C3 = {
+						DevelopmentTeam = GYV39WAN3G;
+					};
 					1A3487D018DEAD6E00D021C3 = {
 						TestTargetID = 1A3487AC18DEAD6E00D021C3;
 					};
@@ -464,10 +467,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NumberTileGame/NumberTileGame-Prefix.pch";
 				INFOPLIST_FILE = "NumberTileGame/NumberTileGame-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -477,10 +483,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NumberTileGame/NumberTileGame-Prefix.pch";
 				INFOPLIST_FILE = "NumberTileGame/NumberTileGame-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -544,6 +553,7 @@
 				1A3487E418DEAD6E00D021C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1A3487E518DEAD6E00D021C3 /* Build configuration list for PBXNativeTarget "NumberTileGameTests" */ = {
 			isa = XCConfigurationList;
@@ -552,6 +562,7 @@
 				1A3487E718DEAD6E00D021C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
