@@ -3,6 +3,10 @@ iOS-2048
 
 iOS drop-in library presenting a clean-room Objective-C implementation of the game 2048.
 
+Screenshot
+----------
+![Screenshot](screenshots/ss1.png?raw=true)
+
 Instructions
 ------------
 The included sample app demonstrates the game. Simply tap the button to play. For additional fun try tweaking the parameters in F3HViewController.
@@ -27,5 +31,8 @@ Future Features
 - Swipe based controls
 - Actual library (rather than raw code hanging off a sample view controller)
 
+License
+-------
+(c) 2014 Austin Zheng. Released under the terms of the MIT license.
 
 2048 by Gabriele Cirulli (http://gabrielecirulli.com/). The original game can be found at http://gabrielecirulli.github.io/2048/, as can all relevant attributions. 2048 is inspired by an iOS game called "Threes", by Asher Vollmer.
