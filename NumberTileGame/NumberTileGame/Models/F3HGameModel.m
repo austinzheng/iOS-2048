@@ -29,6 +29,8 @@
 @property (nonatomic, strong) NSMutableArray *commandQueue;
 @property (nonatomic, strong) NSTimer *queueTimer;
 
+@property (nonatomic, readwrite) NSInteger score;
+
 @end
 
 @implementation F3HGameModel
@@ -40,7 +42,16 @@
     model.dimension = dimension;
     model.winValue = value;
     model.delegate = delegate;
+    [model reset];
     return model;
+}
+
+- (void)reset {
+    self.score = 0;
+    self.gameState = nil;
+    [self.commandQueue removeAllObjects];
+    [self.queueTimer invalidate];
+    self.queueTimer = nil;
 }
 
 #pragma mark - Insertion API
@@ -238,6 +249,7 @@
             for (NSInteger i=0; i<[ordersArray count]; i++) {
                 F3HMoveOrder *order = ordersArray[i];
                 if (order.doubleMove) {
+                    // Two tiles move and merge at the end of their moves.
                     // Update internal model
                     NSIndexPath *source1Path = [NSIndexPath indexPathForRow:row inSection:order.source1];
                     NSIndexPath *source2Path = [NSIndexPath indexPathForRow:row inSection:order.source2];
@@ -250,6 +262,7 @@
                     F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
+                    self.score += destinationTile.value;
                     
                     // Update delegate
                     [self.delegate moveTileOne:source1Path
@@ -258,6 +271,7 @@
                                       newValue:order.value];
                 }
                 else {
+                    // One tile moves, either to an empty spot or to merge with another tile.
                     // Update internal model
                     NSIndexPath *sourcePath = [NSIndexPath indexPathForRow:row inSection:order.source1];
                     NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:row inSection:order.destination];
@@ -265,8 +279,13 @@
                     F3HTileModel *sourceTile = [self tileForIndexPath:sourcePath];
                     sourceTile.empty = YES;
                     F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
+                    BOOL wasEmpty = destinationTile.empty;
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
+                    if (!wasEmpty) {
+                        // Only increment the score if the destination wasn't empty
+                        self.score += destinationTile.value;
+                    }
                     
                     // Update delegate
                     [self.delegate moveTileFromIndexPath:sourcePath
@@ -364,13 +383,14 @@
     return YES;
 }
 
-- (BOOL)userHasWon {
+- (NSIndexPath *)userHasWon {
     for (NSInteger i=0; i<[self.gameState count]; i++) {
         if (((F3HTileModel *) self.gameState[i]).value == self.winValue) {
-            return YES;
+            return [NSIndexPath indexPathForRow:(i / self.dimension)
+                                      inSection:(i % self.dimension)];
         }
     }
-    return NO;
+    return nil;
 }
 
 

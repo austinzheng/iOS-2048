@@ -14,7 +14,11 @@
 
 @implementation F3HNumberTileGameViewController
 
-+ (instancetype)numberTileGameWithDimension:(NSUInteger)dimension {
++ (instancetype)numberTileGameWithDimension:(NSUInteger)dimension
+                               winThreshold:(NSUInteger)threshold
+                                scoreModule:(BOOL)scoreModuleEnabled
+                             buttonControls:(BOOL)buttonControlsEnabled
+                              swipeControls:(BOOL)swipeControlsEnabled {
     
     return nil;
 }

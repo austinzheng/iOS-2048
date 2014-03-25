@@ -110,13 +110,6 @@
     [self.gameboard insertTileAtIndexPath:path withValue:value];
 }
 
-- (void)playerLost {
-    // TODO
-}
-
-- (void)playerWonWithTile:(NSIndexPath *)tilePath {
-    // TODO
-}
 
 #pragma mark - To delete
 

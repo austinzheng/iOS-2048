@@ -64,10 +64,12 @@
     return view;
 }
 
-- (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (!self) return nil;
-    return self;
+- (void)reset {
+    for (NSString *key in self.boardTiles) {
+        F3HTileView *tile = self.boardTiles[key];
+        [tile removeFromSuperview];
+    }
+    [self.boardTiles removeAllObjects];
 }
 
 - (void)setupBackgroundWithBackgroundColor:(UIColor *)background

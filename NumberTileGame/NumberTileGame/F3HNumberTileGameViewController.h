@@ -10,4 +10,10 @@
 
 @interface F3HNumberTileGameViewController : UIViewController
 
++ (instancetype)numberTileGameWithDimension:(NSUInteger)dimension
+                               winThreshold:(NSUInteger)threshold
+                                scoreModule:(BOOL)scoreModuleEnabled
+                             buttonControls:(BOOL)buttonControlsEnabled
+                              swipeControls:(BOOL)swipeControlsEnabled;
+
 @end
