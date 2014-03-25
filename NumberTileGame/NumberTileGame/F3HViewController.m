@@ -9,12 +9,15 @@
 #import "F3HViewController.h"
 
 #import "F3HGameboardView.h"
+#import "F3HScoreView.h"
 #import "F3HGameModel.h"
 
 @interface F3HViewController () <F3HGameModelProtocol>
 
 @property (nonatomic, strong) F3HGameboardView *gameboard;
 @property (nonatomic, strong) F3HGameModel *model;
+
+@property (nonatomic, strong) F3HScoreView *scoreView;
 
 @property (nonatomic) BOOL moveFlag;
 
@@ -26,6 +29,17 @@
     [super viewDidLoad];
     self.moveFlag = NO;
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    F3HScoreView *scoreView = [F3HScoreView scoreViewWithCornerRadius:6
+                                                      backgroundColor:[UIColor darkGrayColor]
+                                                            textColor:[UIColor whiteColor]
+                                                             textFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:16]];
+    CGRect scoreFrame = scoreView.frame;
+    scoreFrame.origin.x = 0.5*(self.view.bounds.size.width - scoreFrame.size.width);
+    scoreFrame.origin.y = 100;
+    scoreView.frame = scoreFrame;
+    [self.view addSubview:scoreView];
+    self.scoreView = scoreView;
     
     // Debug view controller
     F3HGameboardView *gameboard = [F3HGameboardView gameboardWithDimension:4
@@ -108,6 +122,10 @@
 
 - (void)insertTileAtIndexPath:(NSIndexPath *)path value:(NSUInteger)value {
     [self.gameboard insertTileAtIndexPath:path withValue:value];
+}
+
+- (void)scoreChanged:(NSInteger)newScore {
+    self.scoreView.score = newScore;
 }
 
 

@@ -17,6 +17,8 @@ typedef enum {
 
 @protocol F3HGameModelProtocol
 
+- (void)scoreChanged:(NSInteger)newScore;
+
 - (void)moveTileFromIndexPath:(NSIndexPath *)fromPath
                   toIndexPath:(NSIndexPath *)toPath
                      newValue:(NSUInteger)value;

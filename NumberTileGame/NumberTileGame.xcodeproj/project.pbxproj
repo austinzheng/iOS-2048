@@ -31,6 +31,7 @@
 		1A34881E18E148DB00D021C3 /* F3HGameboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34881B18E148DB00D021C3 /* F3HGameboardView.m */; };
 		1A34881F18E148DB00D021C3 /* F3HTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34881D18E148DB00D021C3 /* F3HTileView.m */; };
 		1A34882218E14BF200D021C3 /* F3HQueueCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34882118E14BF200D021C3 /* F3HQueueCommand.m */; };
+		1A34882518E169AA00D021C3 /* F3HScoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34882418E169AA00D021C3 /* F3HScoreView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,8 @@
 		1A34881D18E148DB00D021C3 /* F3HTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HTileView.m; path = Views/F3HTileView.m; sourceTree = "<group>"; };
 		1A34882018E14BF200D021C3 /* F3HQueueCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = F3HQueueCommand.h; path = Models/F3HQueueCommand.h; sourceTree = "<group>"; };
 		1A34882118E14BF200D021C3 /* F3HQueueCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HQueueCommand.m; path = Models/F3HQueueCommand.m; sourceTree = "<group>"; };
+		1A34882318E169AA00D021C3 /* F3HScoreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = F3HScoreView.h; path = Views/F3HScoreView.h; sourceTree = "<group>"; };
+		1A34882418E169AA00D021C3 /* F3HScoreView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HScoreView.m; path = Views/F3HScoreView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +215,8 @@
 				1A34881B18E148DB00D021C3 /* F3HGameboardView.m */,
 				1A34881C18E148DB00D021C3 /* F3HTileView.h */,
 				1A34881D18E148DB00D021C3 /* F3HTileView.m */,
+				1A34882318E169AA00D021C3 /* F3HScoreView.h */,
+				1A34882418E169AA00D021C3 /* F3HScoreView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -324,6 +329,7 @@
 				1A34881318E1477B00D021C3 /* F3HMergeTile.m in Sources */,
 				1A34882218E14BF200D021C3 /* F3HQueueCommand.m in Sources */,
 				1A34881E18E148DB00D021C3 /* F3HGameboardView.m in Sources */,
+				1A34882518E169AA00D021C3 /* F3HScoreView.m in Sources */,
 				1A34880318E1465D00D021C3 /* F3HMoveOrder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

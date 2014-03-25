@@ -8,13 +8,13 @@ Features
 - 2048, the tile-matching game, but native for iOS
 - Configure size of game board (NxN square) and winning threshold
 - Configure custom cell and cell number colors
+- Scoring system
 - Pretty animations
 
 Future Features
 ---------------
 - Drop-in view controller
-- Better visuals
-- Cleaned-up code
+- Swipe based controls
 - Actual library (rather than raw code hanging off a sample view controller)
 
 

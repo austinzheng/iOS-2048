@@ -262,7 +262,6 @@
                     F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
-                    self.score += destinationTile.value;
                     
                     // Update delegate
                     [self.delegate moveTileOne:source1Path
@@ -279,13 +278,8 @@
                     F3HTileModel *sourceTile = [self tileForIndexPath:sourcePath];
                     sourceTile.empty = YES;
                     F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
-                    BOOL wasEmpty = destinationTile.empty;
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
-                    if (!wasEmpty) {
-                        // Only increment the score if the destination wasn't empty
-                        self.score += destinationTile.value;
-                    }
                     
                     // Update delegate
                     [self.delegate moveTileFromIndexPath:sourcePath
@@ -477,6 +471,11 @@
     return _gameState;
 }
 
+- (void)setScore:(NSInteger)score {
+    _score = score;
+    [self.delegate scoreChanged:score];
+}
+
 // Merge some items to the left
 // "Group" is an array of tile objects
 - (NSArray *)mergeGroup:(NSArray *)group {
@@ -545,6 +544,7 @@
                 newT.mode = F3HMergeTileModeSingleCombine;
                 newT.originalIndexA = t2.originalIndexA;
                 newT.value = t1.value * 2;
+                self.score += newT.value;
                 [stack2 addObject:newT];
             }
             else {
@@ -554,6 +554,7 @@
                 newT.originalIndexA = t1.originalIndexA;
                 newT.originalIndexB = t2.originalIndexA;
                 newT.value = t1.value * 2;
+                self.score += newT.value;
                 [stack2 addObject:newT];
             }
             ctr += 2;
