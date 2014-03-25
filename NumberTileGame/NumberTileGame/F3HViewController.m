@@ -27,7 +27,7 @@
     self.moveFlag = NO;
 	// Do any additional setup after loading the view, typically from a nib.
     
-    // TEST
+    // Debug view controller
     F3HGameboardView *gameboard = [F3HGameboardView gameboardWithDimension:4
                                                                  cellWidth:50
                                                                cellPadding:6
@@ -39,12 +39,6 @@
     gameboard.frame = gameboardFrame;
     
     [self.view addSubview:gameboard];
-    
-//    [gameboard insertTileAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
-//                           withValue:2];
-//    [gameboard insertTileAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]
-//                           withValue:4];
-    
     self.gameboard = gameboard;
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:4 winValue:2048 delegate:self];
 
@@ -52,31 +46,30 @@
     [model insertAtRandomLocationTileWithValue:2];
     
     self.model = model;
-    
 }
 
 - (IBAction)upButtonTapped:(id)sender {
-    if ([self.model performMoveInDirection:F3HMoveDirectionUp]) {
-        [self followUp];
-    }
+    [self.model performMoveInDirection:F3HMoveDirectionUp completionBlock:^(BOOL changed) {
+        if (changed) [self followUp];
+    }];
 }
 
 - (IBAction)downButtonTapped:(id)sender {
-    if ([self.model performMoveInDirection:F3HMoveDirectionDown]) {
-        [self followUp];
-    }
+    [self.model performMoveInDirection:F3HMoveDirectionDown completionBlock:^(BOOL changed) {
+        if (changed) [self followUp];
+    }];
 }
 
 - (IBAction)leftButtonTapped:(id)sender {
-    if ([self.model performMoveInDirection:F3HMoveDirectionLeft]) {
-        [self followUp];
-    }
+    [self.model performMoveInDirection:F3HMoveDirectionLeft completionBlock:^(BOOL changed) {
+        if (changed) [self followUp];
+    }];
 }
 
 - (IBAction)rightButtonTapped:(id)sender {
-    if ([self.model performMoveInDirection:F3HMoveDirectionRight]) {
-        [self followUp];
-    }
+    [self.model performMoveInDirection:F3HMoveDirectionRight completionBlock:^(BOOL changed) {
+        if (changed) [self followUp];
+    }];
 }
 
 - (void)followUp {

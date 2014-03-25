@@ -8,13 +8,14 @@
 
 #import "F3HGameModel.h"
 
-typedef enum {
-    F3HMergeTileModeEmpty = 0,
-    F3HMergeTileModeNoAction,
-    F3HMergeTileModeMove,
-    F3HMergeTileModeSingleCombine,
-    F3HMergeTileModeDoubleCombine
-} F3HMergeTileMode;
+#import "F3HMoveOrder.h"
+#import "F3HTileModel.h"
+#import "F3HMergeTile.h"
+#import "F3HQueueCommand.h"
+
+// Command queue
+#define MAX_COMMANDS      100
+#define QUEUE_DELAY       0.3
 
 @interface F3HGameModel ()
 
@@ -25,32 +26,8 @@ typedef enum {
 @property (nonatomic) NSUInteger dimension;
 @property (nonatomic) NSUInteger winValue;
 
-@end
-
-@interface F3HTile : NSObject
-@property (nonatomic) BOOL empty;
-@property (nonatomic) NSUInteger value;
-+ (instancetype)emptyTile;
-@end
-
-@interface F3HMergeTile : NSObject
-@property (nonatomic) F3HMergeTileMode mode;
-@property (nonatomic) NSInteger originalIndexA;
-@property (nonatomic) NSInteger originalIndexB;
-@property (nonatomic) NSInteger value;
-+ (instancetype)mergeTile;
-@end
-
-@interface F3HMoveOrder ()
-
-+ (instancetype)singleMoveOrderWithSource:(NSInteger)source
-                              destination:(NSInteger)destination
-                                 newValue:(NSInteger)value;
-
-+ (instancetype)doubleMoveOrderWithFirstSource:(NSInteger)source1
-                                  secondSource:(NSInteger)source2
-                                   destination:(NSInteger)destination
-                                      newValue:(NSInteger)value;
+@property (nonatomic, strong) NSMutableArray *commandQueue;
+@property (nonatomic, strong) NSTimer *queueTimer;
 
 @end
 
@@ -72,7 +49,7 @@ typedef enum {
     // Check if gameboard is full
     BOOL emptySpotFound = NO;
     for (NSInteger i=0; i<[self.gameState count]; i++) {
-        if (((F3HTile *) self.gameState[i]).empty) {
+        if (((F3HTileModel *) self.gameState[i]).empty) {
             emptySpotFound = YES;
             break;
         }
@@ -118,7 +95,7 @@ typedef enum {
     if (![self tileForIndexPath:path].empty) {
         return;
     }
-    F3HTile *tile = [self tileForIndexPath:path];
+    F3HTileModel *tile = [self tileForIndexPath:path];
     tile.empty = NO;
     tile.value = value;
     [self.delegate insertTileAtIndexPath:path value:value];
@@ -128,17 +105,9 @@ typedef enum {
 #pragma mark - Movement API
 
 // Perform a user-initiated move in one of four directions
-- (BOOL)performMoveInDirection:(F3HMoveDirection)direction {
-    switch (direction) {
-        case F3HMoveDirectionUp:
-            return [self performUpMove];
-        case F3HMoveDirectionDown:
-            return [self performDownMove];
-        case F3HMoveDirectionLeft:
-            return [self performLeftMove];
-        case F3HMoveDirectionRight:
-            return [self performRightMove];
-    }
+- (void)performMoveInDirection:(F3HMoveDirection)direction
+               completionBlock:(void(^)(BOOL))completion {
+    [self queueCommand:[F3HQueueCommand commandWithDirection:direction completionBlock:completion]];
 }
 
 - (BOOL)performUpMove {
@@ -161,11 +130,11 @@ typedef enum {
                     NSIndexPath *source2Path = [NSIndexPath indexPathForRow:order.source2 inSection:column];
                     NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:order.destination inSection:column];
                     
-                    F3HTile *source1Tile = [self tileForIndexPath:source1Path];
+                    F3HTileModel *source1Tile = [self tileForIndexPath:source1Path];
                     source1Tile.empty = YES;
-                    F3HTile *source2Tile = [self tileForIndexPath:source2Path];
+                    F3HTileModel *source2Tile = [self tileForIndexPath:source2Path];
                     source2Tile.empty = YES;
-                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
                     
@@ -180,9 +149,9 @@ typedef enum {
                     NSIndexPath *sourcePath = [NSIndexPath indexPathForRow:order.source1 inSection:column];
                     NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:order.destination inSection:column];
                     
-                    F3HTile *sourceTile = [self tileForIndexPath:sourcePath];
+                    F3HTileModel *sourceTile = [self tileForIndexPath:sourcePath];
                     sourceTile.empty = YES;
-                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
                     
@@ -218,11 +187,11 @@ typedef enum {
                     NSIndexPath *source2Path = [NSIndexPath indexPathForRow:(dim - order.source2) inSection:column];
                     NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:(dim - order.destination) inSection:column];
                     
-                    F3HTile *source1Tile = [self tileForIndexPath:source1Path];
+                    F3HTileModel *source1Tile = [self tileForIndexPath:source1Path];
                     source1Tile.empty = YES;
-                    F3HTile *source2Tile = [self tileForIndexPath:source2Path];
+                    F3HTileModel *source2Tile = [self tileForIndexPath:source2Path];
                     source2Tile.empty = YES;
-                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
                     
@@ -237,9 +206,9 @@ typedef enum {
                     NSIndexPath *sourcePath = [NSIndexPath indexPathForRow:(dim - order.source1) inSection:column];
                     NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:(dim - order.destination) inSection:column];
                     
-                    F3HTile *sourceTile = [self tileForIndexPath:sourcePath];
+                    F3HTileModel *sourceTile = [self tileForIndexPath:sourcePath];
                     sourceTile.empty = YES;
-                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
                     
@@ -274,11 +243,11 @@ typedef enum {
                     NSIndexPath *source2Path = [NSIndexPath indexPathForRow:row inSection:order.source2];
                     NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:row inSection:order.destination];
                     
-                    F3HTile *source1Tile = [self tileForIndexPath:source1Path];
+                    F3HTileModel *source1Tile = [self tileForIndexPath:source1Path];
                     source1Tile.empty = YES;
-                    F3HTile *source2Tile = [self tileForIndexPath:source2Path];
+                    F3HTileModel *source2Tile = [self tileForIndexPath:source2Path];
                     source2Tile.empty = YES;
-                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
                     
@@ -293,9 +262,9 @@ typedef enum {
                     NSIndexPath *sourcePath = [NSIndexPath indexPathForRow:row inSection:order.source1];
                     NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:row inSection:order.destination];
                     
-                    F3HTile *sourceTile = [self tileForIndexPath:sourcePath];
+                    F3HTileModel *sourceTile = [self tileForIndexPath:sourcePath];
                     sourceTile.empty = YES;
-                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
                     
@@ -331,11 +300,11 @@ typedef enum {
                     NSIndexPath *source2Path = [NSIndexPath indexPathForRow:row inSection:(dim - order.source2)];
                     NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:row inSection:(dim - order.destination)];
                     
-                    F3HTile *source1Tile = [self tileForIndexPath:source1Path];
+                    F3HTileModel *source1Tile = [self tileForIndexPath:source1Path];
                     source1Tile.empty = YES;
-                    F3HTile *source2Tile = [self tileForIndexPath:source2Path];
+                    F3HTileModel *source2Tile = [self tileForIndexPath:source2Path];
                     source2Tile.empty = YES;
-                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
                     
@@ -350,9 +319,9 @@ typedef enum {
                     NSIndexPath *sourcePath = [NSIndexPath indexPathForRow:row inSection:(dim - order.source1)];
                     NSIndexPath *destinationPath = [NSIndexPath indexPathForRow:row inSection:(dim - order.destination)];
                     
-                    F3HTile *sourceTile = [self tileForIndexPath:sourcePath];
+                    F3HTileModel *sourceTile = [self tileForIndexPath:sourcePath];
                     sourceTile.empty = YES;
-                    F3HTile *destinationTile = [self tileForIndexPath:destinationPath];
+                    F3HTileModel *destinationTile = [self tileForIndexPath:destinationPath];
                     destinationTile.empty = NO;
                     destinationTile.value = order.value;
                     
@@ -372,7 +341,7 @@ typedef enum {
 
 - (BOOL)userHasLost {
     for (NSInteger i=0; i<[self.gameState count]; i++) {
-        if (((F3HTile *) self.gameState[i]).empty) {
+        if (((F3HTileModel *) self.gameState[i]).empty) {
             // Gameboard must be full for the user to lose
             return NO;
         }
@@ -381,7 +350,7 @@ typedef enum {
     // Every tile compares its value to that of the tiles to the right and below (if possible)
     for (NSInteger i=0; i<self.dimension; i++) {
         for (NSInteger j=0; j<self.dimension; j++) {
-            F3HTile *tile = [self tileForIndexPath:[NSIndexPath indexPathForRow:i inSection:j]];
+            F3HTileModel *tile = [self tileForIndexPath:[NSIndexPath indexPathForRow:i inSection:j]];
             if (j != (self.dimension - 1)
                 && tile.value == [self tileForIndexPath:[NSIndexPath indexPathForRow:i inSection:j+1]].value) {
                 return NO;
@@ -397,7 +366,7 @@ typedef enum {
 
 - (BOOL)userHasWon {
     for (NSInteger i=0; i<[self.gameState count]; i++) {
-        if (((F3HTile *) self.gameState[i]).value == self.winValue) {
+        if (((F3HTileModel *) self.gameState[i]).value == self.winValue) {
             return YES;
         }
     }
@@ -407,7 +376,55 @@ typedef enum {
 
 #pragma mark - Private Methods
 
-- (F3HTile *)tileForIndexPath:(NSIndexPath *)indexPath {
+- (void)queueCommand:(F3HQueueCommand *)command {
+    if (!command || [self.commandQueue count] > MAX_COMMANDS) return;
+
+    [self.commandQueue addObject:command];
+    if (!self.queueTimer || ![self.queueTimer isValid]) {
+        // Timer isn't running, so fire the event immediately.
+        [self timerFired:nil];
+    }
+}
+
+- (void)timerFired:(NSTimer *)timer {
+    if ([self.commandQueue count] == 0) return;
+
+    BOOL changed = NO;
+    while ([self.commandQueue count] > 0) {
+        F3HQueueCommand *command = [self.commandQueue firstObject];
+        [self.commandQueue removeObjectAtIndex:0];
+        switch (command.direction) {
+            case F3HMoveDirectionUp:
+                changed = [self performUpMove];
+                break;
+            case F3HMoveDirectionDown:
+                changed = [self performDownMove];
+                break;
+            case F3HMoveDirectionLeft:
+                changed = [self performLeftMove];
+                break;
+            case F3HMoveDirectionRight:
+                changed = [self performRightMove];
+                break;
+        }
+        if (command.completion) {
+            command.completion(changed);
+        }
+        if (changed) {
+            // This allows us to immediately remove 'useless' commands without gumming up the queue
+            break;
+        }
+    }
+    
+    // Schedule the timer, so new moves aren't run immediately
+    self.queueTimer = [NSTimer scheduledTimerWithTimeInterval:QUEUE_DELAY
+                                                       target:self
+                                                     selector:@selector(timerFired:)
+                                                     userInfo:nil
+                                                      repeats:NO];
+}
+
+- (F3HTileModel *)tileForIndexPath:(NSIndexPath *)indexPath {
     NSInteger idx = (indexPath.row*self.dimension + indexPath.section);
     if (idx >= [self.gameState count]) {
         return nil;
@@ -415,7 +432,7 @@ typedef enum {
     return self.gameState[idx];
 }
 
-- (void)setTile:(F3HTile *)tile forIndexPath:(NSIndexPath *)indexPath {
+- (void)setTile:(F3HTileModel *)tile forIndexPath:(NSIndexPath *)indexPath {
     NSInteger idx = (indexPath.row*self.dimension + indexPath.section);
     if (!tile || idx >= [self.gameState count]) {
         return;
@@ -423,11 +440,18 @@ typedef enum {
     self.gameState[idx] = tile;
 }
 
+- (NSMutableArray *)commandQueue {
+    if (!_commandQueue) {
+        _commandQueue = [NSMutableArray array];
+    }
+    return _commandQueue;
+}
+
 - (NSMutableArray *)gameState {
     if (!_gameState) {
         _gameState = [NSMutableArray array];
         for (NSInteger i=0; i<(self.dimension * self.dimension); i++) {
-            [_gameState addObject:[F3HTile emptyTile]];
+            [_gameState addObject:[F3HTileModel emptyTile]];
         }
     }
     return _gameState;
@@ -442,7 +466,7 @@ typedef enum {
     // At this point, tiles either move or don't move, and their value remains the same
     NSMutableArray *stack1 = [NSMutableArray array];
     for (NSInteger i=0; i<self.dimension; i++) {
-        F3HTile *tile = group[i];
+        F3HTileModel *tile = group[i];
         if (tile.empty) {
             // Don't do anything with empty tiles
             continue;
@@ -559,99 +583,6 @@ typedef enum {
     }
     // Return the finalized array
     return [NSArray arrayWithArray:stack3];
-}
-
-@end
-
-
-#pragma mark - F3HMergeTile
-
-@implementation F3HMergeTile
-
-+ (instancetype)mergeTile {
-    return [[self class] new];
-}
-
-- (NSString *)description {
-    NSString *modeStr;
-    switch (self.mode) {
-        case F3HMergeTileModeEmpty:
-            modeStr = @"Empty";
-            break;
-        case F3HMergeTileModeNoAction:
-            modeStr = @"NoAction";
-            break;
-        case F3HMergeTileModeMove:
-            modeStr = @"Move";
-            break;
-        case F3HMergeTileModeSingleCombine:
-            modeStr = @"SingleCombine";
-            break;
-        case F3HMergeTileModeDoubleCombine:
-            modeStr = @"DoubleCombine";
-    }
-    return [NSString stringWithFormat:@"MergeTile (mode: %@, source1: %d, source2: %d, value: %d)",
-            modeStr, self.originalIndexA, self.originalIndexB, self.value];
-}
-
-@end
-
-
-#pragma mark - F3HMoveOrder
-
-@implementation F3HMoveOrder
-
-+ (instancetype)singleMoveOrderWithSource:(NSInteger)source destination:(NSInteger)destination newValue:(NSInteger)value {
-    F3HMoveOrder *order = [[self class] new];
-    order.doubleMove = NO;
-    order.source1 = source;
-    order.destination = destination;
-    order.value = value;
-    return order;
-}
-
-+ (instancetype)doubleMoveOrderWithFirstSource:(NSInteger)source1
-                                  secondSource:(NSInteger)source2
-                                   destination:(NSInteger)destination
-                                      newValue:(NSInteger)value {
-    F3HMoveOrder *order = [[self class] new];
-    order.doubleMove = YES;
-    order.source1 = source1;
-    order.source2 = source2;
-    order.destination = destination;
-    order.value = value;
-    return order;
-}
-
-- (NSString *)description {
-    if (self.doubleMove) {
-        return [NSString stringWithFormat:@"MoveOrder (double, source1: %d, source2: %d, destination: %d, value: %d)",
-                self.source1, self.source2, self.destination, self.value];
-    }
-    return [NSString stringWithFormat:@"MoveOrder (single, source: %d, destination: %d, value: %d)",
-            self.source1, self.destination, self.value];
-}
-
-@end
-
-
-#pragma mark - F3HTile
-
-// Helper class
-@implementation F3HTile
-
-+ (instancetype)emptyTile {
-    F3HTile *tile = [[self class] new];
-    tile.empty = YES;
-    tile.value = 0;
-    return tile;
-}
-
-- (NSString *)description {
-    if (self.empty) {
-        return @"Tile (empty)";
-    }
-    return [NSString stringWithFormat:@"Tile (value: %d)", self.value];
 }
 
 @end

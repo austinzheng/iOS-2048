@@ -21,12 +21,16 @@
 		1A3487D518DEAD6E00D021C3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A3487B418DEAD6E00D021C3 /* UIKit.framework */; };
 		1A3487DD18DEAD6E00D021C3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A3487DB18DEAD6E00D021C3 /* InfoPlist.strings */; };
 		1A3487DF18DEAD6E00D021C3 /* NumberTileGameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487DE18DEAD6E00D021C3 /* NumberTileGameTests.m */; };
-		1A3487EA18DEAD9500D021C3 /* F3HGameboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487E918DEAD9500D021C3 /* F3HGameboardView.m */; };
-		1A3487ED18DEAECA00D021C3 /* F3HTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487EC18DEAECA00D021C3 /* F3HTileView.m */; };
 		1A3487F318DEBADA00D021C3 /* F3HNumberTileGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487F218DEBADA00D021C3 /* F3HNumberTileGameViewController.m */; };
 		1A3487F618DEBB9C00D021C3 /* F3HTileColorProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487F518DEBB9C00D021C3 /* F3HTileColorProvider.m */; };
-		1A3487F918DFEED800D021C3 /* F3HGameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487F818DFEED800D021C3 /* F3HGameModel.m */; };
 		1A3487FE18E028A100D021C3 /* F3HModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487FD18E028A100D021C3 /* F3HModelTests.m */; };
+		1A34880318E1465D00D021C3 /* F3HMoveOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34880218E1465D00D021C3 /* F3HMoveOrder.m */; };
+		1A34880D18E1468400D021C3 /* F3HGameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34880C18E1468400D021C3 /* F3HGameModel.m */; };
+		1A34881018E146D800D021C3 /* F3HTileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34880F18E146D700D021C3 /* F3HTileModel.m */; };
+		1A34881318E1477B00D021C3 /* F3HMergeTile.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34881218E1477B00D021C3 /* F3HMergeTile.m */; };
+		1A34881E18E148DB00D021C3 /* F3HGameboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34881B18E148DB00D021C3 /* F3HGameboardView.m */; };
+		1A34881F18E148DB00D021C3 /* F3HTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34881D18E148DB00D021C3 /* F3HTileView.m */; };
+		1A34882218E14BF200D021C3 /* F3HQueueCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34882118E14BF200D021C3 /* F3HQueueCommand.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,17 +63,25 @@
 		1A3487DA18DEAD6E00D021C3 /* NumberTileGameTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NumberTileGameTests-Info.plist"; sourceTree = "<group>"; };
 		1A3487DC18DEAD6E00D021C3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1A3487DE18DEAD6E00D021C3 /* NumberTileGameTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NumberTileGameTests.m; sourceTree = "<group>"; };
-		1A3487E818DEAD9500D021C3 /* F3HGameboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HGameboardView.h; sourceTree = "<group>"; };
-		1A3487E918DEAD9500D021C3 /* F3HGameboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HGameboardView.m; sourceTree = "<group>"; };
-		1A3487EB18DEAECA00D021C3 /* F3HTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HTileView.h; sourceTree = "<group>"; };
-		1A3487EC18DEAECA00D021C3 /* F3HTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HTileView.m; sourceTree = "<group>"; };
 		1A3487F118DEBADA00D021C3 /* F3HNumberTileGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HNumberTileGameViewController.h; sourceTree = "<group>"; };
 		1A3487F218DEBADA00D021C3 /* F3HNumberTileGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HNumberTileGameViewController.m; sourceTree = "<group>"; };
 		1A3487F418DEBB9C00D021C3 /* F3HTileColorProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HTileColorProvider.h; sourceTree = "<group>"; };
 		1A3487F518DEBB9C00D021C3 /* F3HTileColorProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HTileColorProvider.m; sourceTree = "<group>"; };
-		1A3487F718DFEED800D021C3 /* F3HGameModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HGameModel.h; sourceTree = "<group>"; };
-		1A3487F818DFEED800D021C3 /* F3HGameModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HGameModel.m; sourceTree = "<group>"; };
 		1A3487FD18E028A100D021C3 /* F3HModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HModelTests.m; sourceTree = "<group>"; };
+		1A34880118E1465D00D021C3 /* F3HMoveOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = F3HMoveOrder.h; path = Models/F3HMoveOrder.h; sourceTree = "<group>"; };
+		1A34880218E1465D00D021C3 /* F3HMoveOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HMoveOrder.m; path = Models/F3HMoveOrder.m; sourceTree = "<group>"; };
+		1A34880B18E1468400D021C3 /* F3HGameModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = F3HGameModel.h; path = Models/F3HGameModel.h; sourceTree = "<group>"; };
+		1A34880C18E1468400D021C3 /* F3HGameModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HGameModel.m; path = Models/F3HGameModel.m; sourceTree = "<group>"; };
+		1A34880E18E146D700D021C3 /* F3HTileModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = F3HTileModel.h; path = Models/F3HTileModel.h; sourceTree = "<group>"; };
+		1A34880F18E146D700D021C3 /* F3HTileModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HTileModel.m; path = Models/F3HTileModel.m; sourceTree = "<group>"; };
+		1A34881118E1477B00D021C3 /* F3HMergeTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = F3HMergeTile.h; path = Models/F3HMergeTile.h; sourceTree = "<group>"; };
+		1A34881218E1477B00D021C3 /* F3HMergeTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HMergeTile.m; path = Models/F3HMergeTile.m; sourceTree = "<group>"; };
+		1A34881A18E148DB00D021C3 /* F3HGameboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = F3HGameboardView.h; path = Views/F3HGameboardView.h; sourceTree = "<group>"; };
+		1A34881B18E148DB00D021C3 /* F3HGameboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HGameboardView.m; path = Views/F3HGameboardView.m; sourceTree = "<group>"; };
+		1A34881C18E148DB00D021C3 /* F3HTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = F3HTileView.h; path = Views/F3HTileView.h; sourceTree = "<group>"; };
+		1A34881D18E148DB00D021C3 /* F3HTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HTileView.m; path = Views/F3HTileView.m; sourceTree = "<group>"; };
+		1A34882018E14BF200D021C3 /* F3HQueueCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = F3HQueueCommand.h; path = Models/F3HQueueCommand.h; sourceTree = "<group>"; };
+		1A34882118E14BF200D021C3 /* F3HQueueCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HQueueCommand.m; path = Models/F3HQueueCommand.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,16 +148,12 @@
 				1A3487C918DEAD6E00D021C3 /* F3HViewController.m */,
 				1A3487CB18DEAD6E00D021C3 /* Images.xcassets */,
 				1A3487B718DEAD6E00D021C3 /* Supporting Files */,
-				1A3487E818DEAD9500D021C3 /* F3HGameboardView.h */,
-				1A3487E918DEAD9500D021C3 /* F3HGameboardView.m */,
-				1A3487EB18DEAECA00D021C3 /* F3HTileView.h */,
-				1A3487EC18DEAECA00D021C3 /* F3HTileView.m */,
+				1A3487FF18E1461F00D021C3 /* Models */,
+				1A34880018E1463E00D021C3 /* Views */,
 				1A3487F118DEBADA00D021C3 /* F3HNumberTileGameViewController.h */,
 				1A3487F218DEBADA00D021C3 /* F3HNumberTileGameViewController.m */,
 				1A3487F418DEBB9C00D021C3 /* F3HTileColorProvider.h */,
 				1A3487F518DEBB9C00D021C3 /* F3HTileColorProvider.m */,
-				1A3487F718DFEED800D021C3 /* F3HGameModel.h */,
-				1A3487F818DFEED800D021C3 /* F3HGameModel.m */,
 			);
 			path = NumberTileGame;
 			sourceTree = "<group>";
@@ -178,6 +186,34 @@
 				1A3487DB18DEAD6E00D021C3 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1A3487FF18E1461F00D021C3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1A34880B18E1468400D021C3 /* F3HGameModel.h */,
+				1A34880C18E1468400D021C3 /* F3HGameModel.m */,
+				1A34880118E1465D00D021C3 /* F3HMoveOrder.h */,
+				1A34880218E1465D00D021C3 /* F3HMoveOrder.m */,
+				1A34880E18E146D700D021C3 /* F3HTileModel.h */,
+				1A34880F18E146D700D021C3 /* F3HTileModel.m */,
+				1A34881118E1477B00D021C3 /* F3HMergeTile.h */,
+				1A34881218E1477B00D021C3 /* F3HMergeTile.m */,
+				1A34882018E14BF200D021C3 /* F3HQueueCommand.h */,
+				1A34882118E14BF200D021C3 /* F3HQueueCommand.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		1A34880018E1463E00D021C3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1A34881A18E148DB00D021C3 /* F3HGameboardView.h */,
+				1A34881B18E148DB00D021C3 /* F3HGameboardView.m */,
+				1A34881C18E148DB00D021C3 /* F3HTileView.h */,
+				1A34881D18E148DB00D021C3 /* F3HTileView.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -278,13 +314,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A3487C118DEAD6E00D021C3 /* F3HAppDelegate.m in Sources */,
+				1A34881018E146D800D021C3 /* F3HTileModel.m in Sources */,
 				1A3487BD18DEAD6E00D021C3 /* main.m in Sources */,
 				1A3487F618DEBB9C00D021C3 /* F3HTileColorProvider.m in Sources */,
+				1A34880D18E1468400D021C3 /* F3HGameModel.m in Sources */,
 				1A3487CA18DEAD6E00D021C3 /* F3HViewController.m in Sources */,
+				1A34881F18E148DB00D021C3 /* F3HTileView.m in Sources */,
 				1A3487F318DEBADA00D021C3 /* F3HNumberTileGameViewController.m in Sources */,
-				1A3487F918DFEED800D021C3 /* F3HGameModel.m in Sources */,
-				1A3487ED18DEAECA00D021C3 /* F3HTileView.m in Sources */,
-				1A3487EA18DEAD9500D021C3 /* F3HGameboardView.m in Sources */,
+				1A34881318E1477B00D021C3 /* F3HMergeTile.m in Sources */,
+				1A34882218E14BF200D021C3 /* F3HQueueCommand.m in Sources */,
+				1A34881E18E148DB00D021C3 /* F3HGameboardView.m in Sources */,
+				1A34880318E1465D00D021C3 /* F3HMoveOrder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

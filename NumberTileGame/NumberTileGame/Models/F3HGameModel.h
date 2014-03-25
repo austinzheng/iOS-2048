@@ -17,6 +17,7 @@ typedef enum {
 
 @protocol F3HGameModelProtocol
 
+// TODO: delete the two lose/win methods?
 - (void)playerLost;
 - (void)playerWonWithTile:(NSIndexPath *)tilePath;
 - (void)moveTileFromIndexPath:(NSIndexPath *)fromPath
@@ -42,21 +43,10 @@ typedef enum {
 - (void)insertTileWithValue:(NSUInteger)value
                 atIndexPath:(NSIndexPath *)path;
 
-- (BOOL)performMoveInDirection:(F3HMoveDirection)direction;
+- (void)performMoveInDirection:(F3HMoveDirection)direction
+               completionBlock:(void(^)(BOOL))completion;
 
 - (BOOL)userHasLost;
 - (BOOL)userHasWon;
 
-#pragma mark - Test
-
-- (NSArray *)mergeGroup:(NSArray *)group;
-
-@end
-
-@interface F3HMoveOrder : NSObject
-@property (nonatomic) NSInteger source1;
-@property (nonatomic) NSInteger source2;
-@property (nonatomic) NSInteger destination;
-@property (nonatomic) BOOL doubleMove;
-@property (nonatomic) NSInteger value;
 @end

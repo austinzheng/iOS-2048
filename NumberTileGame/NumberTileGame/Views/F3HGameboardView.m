@@ -155,12 +155,18 @@
     self.boardTiles[end] = tileA;
 
     [UIView animateWithDuration:(PER_SQUARE_SLIDE_DURATION*1)
+                          delay:0
+                        options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          tileA.frame = finalFrame;
                          tileB.frame = finalFrame;
                      }
                      completion:^(BOOL finished) {
                          tileA.tileValue = value;
+                         if (!finished) {
+                             [tileB removeFromSuperview];
+                             return;
+                         }
                          tileA.layer.affineTransform = CGAffineTransformMakeScale(TILE_MERGE_START_SCALE,
                                                                                   TILE_MERGE_START_SCALE);
                          [tileB removeFromSuperview];
@@ -206,14 +212,16 @@
     self.boardTiles[end] = tile;
     
     [UIView animateWithDuration:(PER_SQUARE_SLIDE_DURATION)
+                          delay:0
+                        options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          tile.frame = finalFrame;
                      }
                      completion:^(BOOL finished) {
-                         if (!shouldPop) {
+                         tile.tileValue = value;
+                         if (!shouldPop || !finished) {
                              return;
                          }
-                         tile.tileValue = value;
                          tile.layer.affineTransform = CGAffineTransformMakeScale(TILE_MERGE_START_SCALE,
                                                                                  TILE_MERGE_START_SCALE);
                          [endTile removeFromSuperview];

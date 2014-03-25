@@ -7,25 +7,14 @@
 //
 
 #import <XCTest/XCTest.h>
+
 #import "F3HGameModel.h"
+#import "F3HMoveOrder.h"
+#import "F3HTileModel.h"
+#import "F3HMergeTile.h"
 
-@interface F3HTile : NSObject
-@property (nonatomic) BOOL empty;
-@property (nonatomic) NSUInteger value;
-+ (instancetype)emptyTile;
-@end
-
-@interface F3HMoveOrder ()
-
-+ (instancetype)singleMoveOrderWithSource:(NSInteger)source
-                              destination:(NSInteger)destination
-                                 newValue:(NSInteger)value;
-
-+ (instancetype)doubleMoveOrderWithFirstSource:(NSInteger)source1
-                                  secondSource:(NSInteger)source2
-                                   destination:(NSInteger)destination
-                                      newValue:(NSInteger)value;
-
+@interface F3HGameModel ()
+- (NSArray *)mergeGroup:(NSArray *)group;
 @end
 
 @interface F3HModelTests : XCTestCase
@@ -48,19 +37,19 @@
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:5 winValue:2048 delegate:nil];
     XCTAssertNotNil(model, @"model should not be nil, when created with test parameters");
     
-    F3HTile *t1 = [F3HTile emptyTile];
+    F3HTileModel *t1 = [F3HTileModel emptyTile];
     t1.value = 1;
     t1.empty = NO;
-    F3HTile *t2 = [F3HTile emptyTile];
+    F3HTileModel *t2 = [F3HTileModel emptyTile];
     t2.value = 2;
     t2.empty = NO;
-    F3HTile *t3 = [F3HTile emptyTile];
+    F3HTileModel *t3 = [F3HTileModel emptyTile];
     t3.value = 4;
     t3.empty = NO;
-    F3HTile *t4 = [F3HTile emptyTile];
+    F3HTileModel *t4 = [F3HTileModel emptyTile];
     t4.value = 8;
     t4.empty = NO;
-    F3HTile *t5 = [F3HTile emptyTile];
+    F3HTileModel *t5 = [F3HTileModel emptyTile];
     t5.value = 1;
     t5.empty = NO;
     
@@ -74,17 +63,17 @@
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:5 winValue:2048 delegate:nil];
     XCTAssertNotNil(model, @"model should not be nil, when created with test parameters");
     
-    F3HTile *t1 = [F3HTile emptyTile];
+    F3HTileModel *t1 = [F3HTileModel emptyTile];
     t1.value = 1;
     t1.empty = NO;
-    F3HTile *t2 = [F3HTile emptyTile];
+    F3HTileModel *t2 = [F3HTileModel emptyTile];
     // T2 is empty
-    F3HTile *t3 = [F3HTile emptyTile];
+    F3HTileModel *t3 = [F3HTileModel emptyTile];
     t3.value = 4;
     t3.empty = NO;
-    F3HTile *t4 = [F3HTile emptyTile];
+    F3HTileModel *t4 = [F3HTileModel emptyTile];
     // T4 is empty
-    F3HTile *t5 = [F3HTile emptyTile];
+    F3HTileModel *t5 = [F3HTileModel emptyTile];
     t5.value = 1;
     t5.empty = NO;
     
@@ -108,19 +97,19 @@
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:5 winValue:2048 delegate:nil];
     XCTAssertNotNil(model, @"model should not be nil, when created with test parameters");
     
-    F3HTile *t1 = [F3HTile emptyTile];
+    F3HTileModel *t1 = [F3HTileModel emptyTile];
     t1.value = 1;
     t1.empty = NO;
-    F3HTile *t2 = [F3HTile emptyTile];
+    F3HTileModel *t2 = [F3HTileModel emptyTile];
     t2.value = 2;
     t2.empty = NO;
-    F3HTile *t3 = [F3HTile emptyTile];
+    F3HTileModel *t3 = [F3HTileModel emptyTile];
     t3.value = 4;
     t3.empty = NO;
-    F3HTile *t4 = [F3HTile emptyTile];
+    F3HTileModel *t4 = [F3HTileModel emptyTile];
     t4.value = 1;
     t4.empty = NO;
-    F3HTile *t5 = [F3HTile emptyTile];
+    F3HTileModel *t5 = [F3HTileModel emptyTile];
     t5.value = 1;
     t5.empty = NO;
     
@@ -140,18 +129,18 @@
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:5 winValue:2048 delegate:nil];
     XCTAssertNotNil(model, @"model should not be nil, when created with test parameters");
     
-    F3HTile *t1 = [F3HTile emptyTile];
+    F3HTileModel *t1 = [F3HTileModel emptyTile];
     t1.value = 2;
     t1.empty = NO;
-    F3HTile *t2 = [F3HTile emptyTile];
+    F3HTileModel *t2 = [F3HTileModel emptyTile];
     t2.value = 2;
     t2.empty = NO;
-    F3HTile *t3 = [F3HTile emptyTile];
+    F3HTileModel *t3 = [F3HTileModel emptyTile];
     t3.value = 16;
     t3.empty = NO;
-    F3HTile *t4 = [F3HTile emptyTile];
+    F3HTileModel *t4 = [F3HTileModel emptyTile];
     // T4 is empty
-    F3HTile *t5 = [F3HTile emptyTile];
+    F3HTileModel *t5 = [F3HTileModel emptyTile];
     t5.value = 1;
     t5.empty = NO;
     
@@ -183,18 +172,18 @@
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:5 winValue:2048 delegate:nil];
     XCTAssertNotNil(model, @"model should not be nil, when created with test parameters");
     
-    F3HTile *t1 = [F3HTile emptyTile];
+    F3HTileModel *t1 = [F3HTileModel emptyTile];
     t1.value = 2;
     t1.empty = NO;
-    F3HTile *t2 = [F3HTile emptyTile];
+    F3HTileModel *t2 = [F3HTileModel emptyTile];
     t2.value = 2;
     t2.empty = NO;
-    F3HTile *t3 = [F3HTile emptyTile];
+    F3HTileModel *t3 = [F3HTileModel emptyTile];
     t3.value = 2;
     t3.empty = NO;
-    F3HTile *t4 = [F3HTile emptyTile];
+    F3HTileModel *t4 = [F3HTileModel emptyTile];
     // T4 is empty
-    F3HTile *t5 = [F3HTile emptyTile];
+    F3HTileModel *t5 = [F3HTileModel emptyTile];
     // T4 is empty
     
     NSArray *tiles = @[t1, t2, t3, t4, t5];
@@ -219,19 +208,19 @@
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:5 winValue:2048 delegate:nil];
     XCTAssertNotNil(model, @"model should not be nil, when created with test parameters");
     
-    F3HTile *t1 = [F3HTile emptyTile];
+    F3HTileModel *t1 = [F3HTileModel emptyTile];
     t1.value = 2;
     t1.empty = NO;
-    F3HTile *t2 = [F3HTile emptyTile];
+    F3HTileModel *t2 = [F3HTileModel emptyTile];
     t2.value = 2;
     t2.empty = NO;
-    F3HTile *t3 = [F3HTile emptyTile];
+    F3HTileModel *t3 = [F3HTileModel emptyTile];
     t3.value = 2;
     t3.empty = NO;
-    F3HTile *t4 = [F3HTile emptyTile];
+    F3HTileModel *t4 = [F3HTileModel emptyTile];
     t4.value = 16;
     t4.empty = NO;
-    F3HTile *t5 = [F3HTile emptyTile];
+    F3HTileModel *t5 = [F3HTileModel emptyTile];
     t5.value = 16;
     t5.empty = NO;
     
@@ -264,18 +253,18 @@
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:5 winValue:2048 delegate:nil];
     XCTAssertNotNil(model, @"model should not be nil, when created with test parameters");
     
-    F3HTile *t1 = [F3HTile emptyTile];
+    F3HTileModel *t1 = [F3HTileModel emptyTile];
     // T1 is empty
-    F3HTile *t2 = [F3HTile emptyTile];
+    F3HTileModel *t2 = [F3HTileModel emptyTile];
     t2.value = 2;
     t2.empty = NO;
-    F3HTile *t3 = [F3HTile emptyTile];
+    F3HTileModel *t3 = [F3HTileModel emptyTile];
     t3.value = 2;
     t3.empty = NO;
-    F3HTile *t4 = [F3HTile emptyTile];
+    F3HTileModel *t4 = [F3HTileModel emptyTile];
     t4.value = 16;
     t4.empty = NO;
-    F3HTile *t5 = [F3HTile emptyTile];
+    F3HTileModel *t5 = [F3HTileModel emptyTile];
     t5.value = 16;
     t5.empty = NO;
 
@@ -303,18 +292,18 @@
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:5 winValue:2048 delegate:nil];
     XCTAssertNotNil(model, @"model should not be nil, when created with test parameters");
     
-    F3HTile *t1 = [F3HTile emptyTile];
+    F3HTileModel *t1 = [F3HTileModel emptyTile];
     t1.value = 4;
     t1.empty = NO;
-    F3HTile *t2 = [F3HTile emptyTile];
+    F3HTileModel *t2 = [F3HTileModel emptyTile];
     // T2 is empty
-    F3HTile *t3 = [F3HTile emptyTile];
+    F3HTileModel *t3 = [F3HTileModel emptyTile];
     t3.value = 4;
     t3.empty = NO;
-    F3HTile *t4 = [F3HTile emptyTile];
+    F3HTileModel *t4 = [F3HTileModel emptyTile];
     t4.value = 32;
     t4.empty = NO;
-    F3HTile *t5 = [F3HTile emptyTile];
+    F3HTileModel *t5 = [F3HTileModel emptyTile];
     t5.value = 32;
     t5.empty = NO;
     
