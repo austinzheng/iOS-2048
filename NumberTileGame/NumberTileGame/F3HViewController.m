@@ -47,10 +47,6 @@
     
     self.gameboard = gameboard;
     F3HGameModel *model = [F3HGameModel gameModelWithDimension:4 winValue:2048 delegate:self];
-    
-//    [model insertTileWithValue:2 atIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-//    [model insertTileWithValue:4 atIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]];
-//    [model insertTileWithValue:4 atIndexPath:[NSIndexPath indexPathForRow:3 inSection:2]];
 
     [model insertAtRandomLocationTileWithValue:2];
     [model insertAtRandomLocationTileWithValue:2];

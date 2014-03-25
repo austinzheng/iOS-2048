@@ -14,6 +14,18 @@
 
 #define PER_SQUARE_SLIDE_DURATION 0.08
 
+// Animation parameters
+#define TILE_POP_START_SCALE    0.1
+#define TILE_POP_MAX_SCALE      1.1
+#define TILE_POP_DELAY          0.05
+#define TILE_EXPAND_TIME        0.18
+#define TILE_RETRACT_TIME       0.08
+
+#define TILE_MERGE_START_SCALE  1.0
+#define TILE_MERGE_EXPAND_TIME  0.08
+#define TILE_MERGE_RETRACT_TIME 0.08
+
+
 @interface F3HGameboardView ()
 
 @property (nonatomic, strong) NSMutableDictionary *boardTiles;
@@ -63,7 +75,6 @@
     for (NSInteger i=0; i<self.dimension; i++) {
         yCursor = self.padding;
         for (NSInteger j=0; j<self.dimension; j++) {
-            // TODO: round corners?
             UIView *bkgndTile = [[UIView alloc] initWithFrame:CGRectMake(xCursor,
                                                                          yCursor,
                                                                          self.tileSideLength,
@@ -96,9 +107,25 @@
                                           sideLength:self.tileSideLength
                                                value:value];
     tile.delegate = self.provider;
+    tile.layer.affineTransform = CGAffineTransformMakeScale(TILE_POP_START_SCALE, TILE_POP_START_SCALE);
     [self addSubview:tile];
     self.boardTiles[path] = tile;
-    // TODO: Animation:
+
+    // Add the new tile to the board, with a pop animation
+    [UIView animateWithDuration:TILE_EXPAND_TIME
+                          delay:TILE_POP_DELAY
+                        options:0
+                     animations:^{
+                         tile.layer.affineTransform = CGAffineTransformMakeScale(TILE_POP_MAX_SCALE,
+                                                                                 TILE_POP_MAX_SCALE);
+    } completion:^(BOOL finished) {
+        // Run the 'shrink' animation
+        [UIView animateWithDuration:TILE_RETRACT_TIME animations:^{
+            tile.layer.affineTransform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            // Nothing right now
+        }];
+    }];
 }
 
 - (void)moveTileOne:(NSIndexPath *)startA
@@ -134,7 +161,21 @@
                      }
                      completion:^(BOOL finished) {
                          tileA.tileValue = value;
+                         tileA.layer.affineTransform = CGAffineTransformMakeScale(TILE_MERGE_START_SCALE,
+                                                                                  TILE_MERGE_START_SCALE);
                          [tileB removeFromSuperview];
+                         [UIView animateWithDuration:TILE_MERGE_EXPAND_TIME
+                                          animations:^{
+                                              tileA.layer.affineTransform = CGAffineTransformMakeScale(TILE_POP_MAX_SCALE,
+                                                                                                       TILE_POP_MAX_SCALE);
+                                          } completion:^(BOOL finished) {
+                                              [UIView animateWithDuration:TILE_MERGE_RETRACT_TIME
+                                                               animations:^{
+                                                                   tileA.layer.affineTransform = CGAffineTransformIdentity;
+                                                               } completion:^(BOOL finished) {
+                                                                   // nothing yet
+                                                               }];
+                                          }];
                      }];
 }
 
@@ -152,20 +193,8 @@
     }
     F3HTileView *tile = self.boardTiles[start];
     F3HTileView *endTile = self.boardTiles[end];
-//    NSInteger distance;
-//    if (start.row == end.row) {
-//        // Move up and down
-//        distance = abs(start.section - end.section);
-//    }
-//    else if (start.section == end.section) {
-//        // Move left and right
-//        distance = abs(start.row - end.row);
-//    }
-//    else {
-//        NSAssert(NO, @"Invalid tile movement. Tried to move from %@ to %@", start, end);
-//    }
-    
-    // TODO: finalize animation
+    BOOL shouldPop = endTile != nil;
+
     CGFloat x = self.padding + end.section*(self.tileSideLength + self.padding);
     CGFloat y = self.padding + end.row*(self.tileSideLength + self.padding);
     CGRect finalFrame = tile.frame;
@@ -176,13 +205,30 @@
     [self.boardTiles removeObjectForKey:start];
     self.boardTiles[end] = tile;
     
-    [UIView animateWithDuration:(PER_SQUARE_SLIDE_DURATION*1)
+    [UIView animateWithDuration:(PER_SQUARE_SLIDE_DURATION)
                      animations:^{
                          tile.frame = finalFrame;
                      }
                      completion:^(BOOL finished) {
+                         if (!shouldPop) {
+                             return;
+                         }
                          tile.tileValue = value;
+                         tile.layer.affineTransform = CGAffineTransformMakeScale(TILE_MERGE_START_SCALE,
+                                                                                 TILE_MERGE_START_SCALE);
                          [endTile removeFromSuperview];
+                         [UIView animateWithDuration:TILE_MERGE_EXPAND_TIME
+                                          animations:^{
+                                              tile.layer.affineTransform = CGAffineTransformMakeScale(TILE_POP_MAX_SCALE,
+                                                                                                      TILE_POP_MAX_SCALE);
+                                          } completion:^(BOOL finished) {
+                                              [UIView animateWithDuration:TILE_MERGE_RETRACT_TIME
+                                                               animations:^{
+                                                                   tile.layer.affineTransform = CGAffineTransformIdentity;
+                                                               } completion:^(BOOL finished) {
+                                                                   // nothing yet
+                                                               }];
+                                          }];
                      }];
 }
 
