@@ -20,6 +20,8 @@ Features
 Future Features
 ---------------
 - Delegate for dismissing view controller
+- Smart text resizing for tile numbers
+- Better looking tiles
 - API for informing parent of game status/victory state
 - Better win/lose screens than UIAlertViews
 - Swipe based controls
