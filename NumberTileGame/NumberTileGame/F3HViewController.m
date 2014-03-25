@@ -31,6 +31,7 @@
     F3HGameboardView *gameboard = [F3HGameboardView gameboardWithDimension:4
                                                                  cellWidth:50
                                                                cellPadding:6
+                                                              cornerRadius:6
                                                            backgroundColor:[UIColor blackColor]
                                                            foregroundColor:[UIColor darkGrayColor]];
     CGRect gameboardFrame = gameboard.frame;

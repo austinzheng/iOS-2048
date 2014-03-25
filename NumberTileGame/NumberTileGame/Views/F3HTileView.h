@@ -17,6 +17,7 @@
 
 + (instancetype)tileForPosition:(CGPoint)position
                      sideLength:(CGFloat)side
-                          value:(NSUInteger)value;
+                          value:(NSUInteger)value
+                   cornerRadius:(CGFloat)cornerRadius;
 
 @end

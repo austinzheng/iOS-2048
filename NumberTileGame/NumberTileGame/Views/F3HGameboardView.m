@@ -34,6 +34,7 @@
 @property (nonatomic) CGFloat tileSideLength;
 
 @property (nonatomic) CGFloat padding;
+@property (nonatomic) CGFloat cornerRadius;
 
 @property (nonatomic, strong) F3HTileColorProvider *provider;
 
@@ -44,6 +45,7 @@
 + (instancetype)gameboardWithDimension:(NSUInteger)dimension
                              cellWidth:(CGFloat)width
                            cellPadding:(CGFloat)padding
+                          cornerRadius:(CGFloat)cornerRadius
                        backgroundColor:(UIColor *)backgroundColor
                        foregroundColor:(UIColor *)foregroundColor {
     
@@ -55,6 +57,8 @@
     view.dimension = dimension;
     view.padding = padding;
     view.tileSideLength = width;
+    view.layer.cornerRadius = cornerRadius;
+    view.cornerRadius = cornerRadius;
     [view setupBackgroundWithBackgroundColor:backgroundColor
                              foregroundColor:foregroundColor];
     return view;
@@ -63,7 +67,6 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (!self) return nil;
-    self.layer.cornerRadius = 5;
     return self;
 }
 
@@ -72,6 +75,10 @@
     self.backgroundColor = background;
     CGFloat xCursor = self.padding;
     CGFloat yCursor;
+    CGFloat cornerRadius = self.cornerRadius - 2;
+    if (cornerRadius < 0) {
+        cornerRadius = 0;
+    }
     for (NSInteger i=0; i<self.dimension; i++) {
         yCursor = self.padding;
         for (NSInteger j=0; j<self.dimension; j++) {
@@ -79,7 +86,7 @@
                                                                          yCursor,
                                                                          self.tileSideLength,
                                                                          self.tileSideLength)];
-            bkgndTile.layer.cornerRadius = 3;
+            bkgndTile.layer.cornerRadius = cornerRadius;
             bkgndTile.backgroundColor = foreground;
             [self addSubview:bkgndTile];
             yCursor += self.padding + self.tileSideLength;
@@ -103,9 +110,14 @@
     CGFloat x = self.padding + path.section*(self.tileSideLength + self.padding);
     CGFloat y = self.padding + path.row*(self.tileSideLength + self.padding);
     CGPoint position = CGPointMake(x, y);
+    CGFloat cornerRadius = self.cornerRadius - 2;
+    if (cornerRadius < 0) {
+        cornerRadius = 0;
+    }
     F3HTileView *tile = [F3HTileView tileForPosition:position
                                           sideLength:self.tileSideLength
-                                               value:value];
+                                               value:value
+                                        cornerRadius:cornerRadius];
     tile.delegate = self.provider;
     tile.layer.affineTransform = CGAffineTransformMakeScale(TILE_POP_START_SCALE, TILE_POP_START_SCALE);
     [self addSubview:tile];

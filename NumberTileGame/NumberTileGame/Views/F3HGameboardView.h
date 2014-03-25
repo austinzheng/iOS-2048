@@ -13,6 +13,7 @@
 + (instancetype)gameboardWithDimension:(NSUInteger)dimension
                              cellWidth:(CGFloat)width
                            cellPadding:(CGFloat)padding
+                          cornerRadius:(CGFloat)cornerRadius
                        backgroundColor:(UIColor *)backgroundColor
                        foregroundColor:(UIColor *)foregroundColor;
 

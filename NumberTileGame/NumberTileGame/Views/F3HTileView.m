@@ -23,7 +23,8 @@
 
 + (instancetype)tileForPosition:(CGPoint)position
                      sideLength:(CGFloat)side
-                          value:(NSUInteger)value {
+                          value:(NSUInteger)value
+                   cornerRadius:(CGFloat)cornerRadius {
     F3HTileView *tile = [[[self class] alloc] initWithFrame:CGRectMake(position.x,
                                                                        position.y,
                                                                        side,
@@ -32,6 +33,7 @@
     tile.backgroundColor = tile.defaultBackgroundColor;
     tile.numberLabel.textColor = tile.defaultNumberColor;
     tile.value = value;
+    tile.layer.cornerRadius = cornerRadius;
     return tile;
 }
 
@@ -46,7 +48,6 @@
     label.textAlignment = NSTextAlignmentCenter;
     [self addSubview:label];
     self.numberLabel = label;
-    self.layer.cornerRadius = 3;
     return self;
 }
 
