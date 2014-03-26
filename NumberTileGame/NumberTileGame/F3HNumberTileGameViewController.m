@@ -216,7 +216,7 @@
 }
 
 - (void)exitButtonTapped {
-    // Do nothing for now
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
