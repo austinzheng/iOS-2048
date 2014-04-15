@@ -19,14 +19,11 @@ Features
 - Configure size of game board (NxN square) and winning threshold
 - Configure custom cell and cell number colors
 - Scoring system
+- API for informing parent of game status/victory state
 - Pretty animations
 
 Future Features
 ---------------
-- Delegate for dismissing view controller
-- Smart text resizing for tile numbers
-- Better looking tiles
-- API for informing parent of game status/victory state
 - Better win/lose screens than UIAlertViews
 - Swipe based controls
 - Actual library (rather than raw code hanging off a sample view controller)

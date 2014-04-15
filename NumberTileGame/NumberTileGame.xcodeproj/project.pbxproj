@@ -22,7 +22,7 @@
 		1A3487DD18DEAD6E00D021C3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A3487DB18DEAD6E00D021C3 /* InfoPlist.strings */; };
 		1A3487DF18DEAD6E00D021C3 /* NumberTileGameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487DE18DEAD6E00D021C3 /* NumberTileGameTests.m */; };
 		1A3487F318DEBADA00D021C3 /* F3HNumberTileGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487F218DEBADA00D021C3 /* F3HNumberTileGameViewController.m */; };
-		1A3487F618DEBB9C00D021C3 /* F3HTileColorProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487F518DEBB9C00D021C3 /* F3HTileColorProvider.m */; };
+		1A3487F618DEBB9C00D021C3 /* F3HTileAppearanceProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487F518DEBB9C00D021C3 /* F3HTileAppearanceProvider.m */; };
 		1A3487FE18E028A100D021C3 /* F3HModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A3487FD18E028A100D021C3 /* F3HModelTests.m */; };
 		1A34880318E1465D00D021C3 /* F3HMoveOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34880218E1465D00D021C3 /* F3HMoveOrder.m */; };
 		1A34880D18E1468400D021C3 /* F3HGameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A34880C18E1468400D021C3 /* F3HGameModel.m */; };
@@ -67,8 +67,8 @@
 		1A3487DE18DEAD6E00D021C3 /* NumberTileGameTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NumberTileGameTests.m; sourceTree = "<group>"; };
 		1A3487F118DEBADA00D021C3 /* F3HNumberTileGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HNumberTileGameViewController.h; sourceTree = "<group>"; };
 		1A3487F218DEBADA00D021C3 /* F3HNumberTileGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HNumberTileGameViewController.m; sourceTree = "<group>"; };
-		1A3487F418DEBB9C00D021C3 /* F3HTileColorProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HTileColorProvider.h; sourceTree = "<group>"; };
-		1A3487F518DEBB9C00D021C3 /* F3HTileColorProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HTileColorProvider.m; sourceTree = "<group>"; };
+		1A3487F418DEBB9C00D021C3 /* F3HTileAppearanceProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F3HTileAppearanceProvider.h; sourceTree = "<group>"; };
+		1A3487F518DEBB9C00D021C3 /* F3HTileAppearanceProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HTileAppearanceProvider.m; sourceTree = "<group>"; };
 		1A3487FD18E028A100D021C3 /* F3HModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F3HModelTests.m; sourceTree = "<group>"; };
 		1A34880118E1465D00D021C3 /* F3HMoveOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = F3HMoveOrder.h; path = Models/F3HMoveOrder.h; sourceTree = "<group>"; };
 		1A34880218E1465D00D021C3 /* F3HMoveOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = F3HMoveOrder.m; path = Models/F3HMoveOrder.m; sourceTree = "<group>"; };
@@ -158,8 +158,8 @@
 				1A34880018E1463E00D021C3 /* Views */,
 				1A3487F118DEBADA00D021C3 /* F3HNumberTileGameViewController.h */,
 				1A3487F218DEBADA00D021C3 /* F3HNumberTileGameViewController.m */,
-				1A3487F418DEBB9C00D021C3 /* F3HTileColorProvider.h */,
-				1A3487F518DEBB9C00D021C3 /* F3HTileColorProvider.m */,
+				1A3487F418DEBB9C00D021C3 /* F3HTileAppearanceProvider.h */,
+				1A3487F518DEBB9C00D021C3 /* F3HTileAppearanceProvider.m */,
 			);
 			path = NumberTileGame;
 			sourceTree = "<group>";
@@ -329,7 +329,7 @@
 				1A3487C118DEAD6E00D021C3 /* F3HAppDelegate.m in Sources */,
 				1A34881018E146D800D021C3 /* F3HTileModel.m in Sources */,
 				1A3487BD18DEAD6E00D021C3 /* main.m in Sources */,
-				1A3487F618DEBB9C00D021C3 /* F3HTileColorProvider.m in Sources */,
+				1A3487F618DEBB9C00D021C3 /* F3HTileAppearanceProvider.m in Sources */,
 				1A34880D18E1468400D021C3 /* F3HGameModel.m in Sources */,
 				1A3487CA18DEAD6E00D021C3 /* F3HViewController.m in Sources */,
 				1A34881F18E148DB00D021C3 /* F3HTileView.m in Sources */,

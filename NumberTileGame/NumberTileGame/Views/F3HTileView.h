@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol F3HTileColorProviderProtocol;
+@protocol F3HTileAppearanceProviderProtocol;
 @interface F3HTileView : UIView
 
 @property (nonatomic) NSInteger tileValue;
 
-@property (nonatomic, weak) id<F3HTileColorProviderProtocol>delegate;
+@property (nonatomic, weak) id<F3HTileAppearanceProviderProtocol>delegate;
 
 + (instancetype)tileForPosition:(CGPoint)position
                      sideLength:(CGFloat)side

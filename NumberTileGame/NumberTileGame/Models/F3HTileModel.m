@@ -21,7 +21,7 @@
     if (self.empty) {
         return @"Tile (empty)";
     }
-    return [NSString stringWithFormat:@"Tile (value: %d)", self.value];
+    return [NSString stringWithFormat:@"Tile (value: %lu)", (unsigned long)self.value];
 }
 
 @end

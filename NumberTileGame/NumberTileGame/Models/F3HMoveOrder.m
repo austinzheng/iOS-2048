@@ -34,11 +34,16 @@
 
 - (NSString *)description {
     if (self.doubleMove) {
-        return [NSString stringWithFormat:@"MoveOrder (double, source1: %d, source2: %d, destination: %d, value: %d)",
-                self.source1, self.source2, self.destination, self.value];
+        return [NSString stringWithFormat:@"MoveOrder (double, source1: %ld, source2: %ld, destination: %ld, value: %ld)",
+                (long)self.source1,
+                (long)self.source2,
+                (long)self.destination,
+                (long)self.value];
     }
-    return [NSString stringWithFormat:@"MoveOrder (single, source: %d, destination: %d, value: %d)",
-            self.source1, self.destination, self.value];
+    return [NSString stringWithFormat:@"MoveOrder (single, source: %ld, destination: %ld, value: %ld)",
+            (long)self.source1,
+            (long)self.destination,
+            (long)self.value];
 }
 
 @end

@@ -8,7 +8,7 @@
 
 #import "F3HTileView.h"
 
-#import "F3HTileColorProvider.h"
+#import "F3HTileAppearanceProvider.h"
 
 @interface F3HTileView ()
 
@@ -46,16 +46,18 @@
                                                                frame.size.width,
                                                                frame.size.height)];
     label.textAlignment = NSTextAlignmentCenter;
+    label.minimumScaleFactor = 0.5;
     [self addSubview:label];
     self.numberLabel = label;
     return self;
 }
 
-- (void)setDelegate:(id<F3HTileColorProviderProtocol>)delegate {
+- (void)setDelegate:(id<F3HTileAppearanceProviderProtocol>)delegate {
     _delegate = delegate;
     if (delegate) {
         self.backgroundColor = [delegate tileColorForValue:self.tileValue];
         self.numberLabel.textColor = [delegate numberColorForValue:self.tileValue];
+        self.numberLabel.font = [delegate fontForNumbers];
     }
 }
 

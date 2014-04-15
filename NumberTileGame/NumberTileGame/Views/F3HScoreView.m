@@ -46,7 +46,7 @@
 
 - (void)setScore:(NSInteger)score {
     _score = score;
-    self.scoreLabel.text = [NSString stringWithFormat:@"SCORE: %d", score];
+    self.scoreLabel.text = [NSString stringWithFormat:@"SCORE: %ld", (long)score];
 }
 
 @end

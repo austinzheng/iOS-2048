@@ -10,9 +10,15 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "F3HTileView.h"
-#import "F3HTileColorProvider.h"
+#import "F3HTileAppearanceProvider.h"
 
 #define PER_SQUARE_SLIDE_DURATION 0.08
+
+#if DEBUG
+#define F3HLOG(...) NSLog(__VA_ARGS__)
+#else
+#define F3HLOG(...)
+#endif
 
 // Animation parameters
 #define TILE_POP_START_SCALE    0.1
@@ -36,7 +42,7 @@
 @property (nonatomic) CGFloat padding;
 @property (nonatomic) CGFloat cornerRadius;
 
-@property (nonatomic, strong) F3HTileColorProvider *provider;
+@property (nonatomic, strong) F3HTileAppearanceProvider *provider;
 
 @end
 
@@ -100,7 +106,7 @@
 // Insert a tile, with the popping animation
 - (void)insertTileAtIndexPath:(NSIndexPath *)path
                     withValue:(NSUInteger)value {
-    NSLog(@"Inserting tile at row %d, column %d", path.row, path.section);
+    F3HLOG(@"Inserting tile at row %ld, column %ld", (long)path.row, (long)path.section);
     if (!path
         || path.row >= self.dimension
         || path.section >= self.dimension
@@ -146,8 +152,10 @@
             tileTwo:(NSIndexPath *)startB
         toIndexPath:(NSIndexPath *)end
           withValue:(NSUInteger)value {
-    NSLog(@"Moving tiles at row %d, column %d and row %d, column %d to destination row %d, column %d",
-          startA.row, startA.section, startB.row, startB.section, end.row, end.section);
+    F3HLOG(@"Moving tiles at row %ld, column %ld and row %ld, column %ld to destination row %ld, column %ld",
+           (long)startA.row, (long)startA.section,
+           (long)startB.row, (long)startB.section,
+           (long)end.row, (long)end.section);
     if (!startA || !startB || !self.boardTiles[startA] || !self.boardTiles[startB]
         || end.row >= self.dimension
         || end.section >= self.dimension) {
@@ -203,8 +211,8 @@
 - (void)moveTileAtIndexPath:(NSIndexPath *)start
                 toIndexPath:(NSIndexPath *)end
                   withValue:(NSUInteger)value {
-    NSLog(@"Moving tile at row %d, column %d to destination row %d, column %d",
-          start.row, start.section, end.row, end.section);
+    F3HLOG(@"Moving tile at row %ld, column %ld to destination row %ld, column %ld",
+           (long)start.row, (long)start.section, (long)end.row, (long)end.section);
     if (!start || !end || !self.boardTiles[start]
         || end.row >= self.dimension
         || end.section >= self.dimension) {
@@ -214,7 +222,7 @@
     F3HTileView *tile = self.boardTiles[start];
     F3HTileView *endTile = self.boardTiles[end];
     BOOL shouldPop = endTile != nil;
-
+    
     CGFloat x = self.padding + end.section*(self.tileSideLength + self.padding);
     CGFloat y = self.padding + end.row*(self.tileSideLength + self.padding);
     CGRect finalFrame = tile.frame;
@@ -254,9 +262,9 @@
                      }];
 }
 
-- (F3HTileColorProvider *)provider {
+- (F3HTileAppearanceProvider *)provider {
     if (!_provider) {
-        _provider = [F3HTileColorProvider new];
+        _provider = [F3HTileAppearanceProvider new];
     }
     return _provider;
 }

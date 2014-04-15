@@ -73,7 +73,7 @@
     NSInteger row = 0;
     BOOL shouldExit = NO;
     while (YES) {
-        row = arc4random_uniform(self.dimension);
+        row = arc4random_uniform((uint32_t)self.dimension);
         // Check if row has any empty spots in column
         for (NSInteger i=0; i<self.dimension; i++) {
             if ([self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:i]].empty) {
@@ -88,7 +88,7 @@
     NSInteger column = 0;
     shouldExit = NO;
     while (YES) {
-        column = arc4random_uniform(self.dimension);
+        column = arc4random_uniform((uint32_t)self.dimension);
         if ([self tileForIndexPath:[NSIndexPath indexPathForRow:row inSection:column]].empty) {
             shouldExit = YES;
             break;

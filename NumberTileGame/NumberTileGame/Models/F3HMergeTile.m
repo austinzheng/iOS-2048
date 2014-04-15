@@ -32,8 +32,11 @@
         case F3HMergeTileModeDoubleCombine:
             modeStr = @"DoubleCombine";
     }
-    return [NSString stringWithFormat:@"MergeTile (mode: %@, source1: %d, source2: %d, value: %d)",
-            modeStr, self.originalIndexA, self.originalIndexB, self.value];
+    return [NSString stringWithFormat:@"MergeTile (mode: %@, source1: %ld, source2: %ld, value: %ld)",
+            modeStr,
+            (long)self.originalIndexA,
+            (long)self.originalIndexB,
+            (long)self.value];
 }
 
 @end
