@@ -1,7 +1,7 @@
 iOS-2048
 ================
 
-iOS drop-in library presenting a clean-room Objective-C implementation of the game 2048.
+iOS drop-in library presenting a clean-room Objective-C/Cocoa implementation of the game 2048.
 
 Screenshot
 ----------
@@ -9,7 +9,7 @@ Screenshot
 
 Instructions
 ------------
-The included sample app demonstrates the game. Simply tap the button to play. For additional fun try tweaking the parameters in F3HViewController.
+The included sample app demonstrates the game. Simply tap the button to play. Swipe to move the tiles. For additional fun try tweaking the parameters in F3HViewController.
 
 Create a new instance of the view controller using the provided factory method, and present it. Or manually create and configure a view and model object, and bridge them using F3HGameModelProtocol.
 
@@ -18,14 +18,14 @@ Features
 - 2048, the tile-matching game, but native for iOS
 - Configure size of game board (NxN square) and winning threshold
 - Configure custom cell and cell number colors
+- Choose between button controls, swipe gesture controls, or both
 - Scoring system
 - API for informing parent of game status/victory state
-- Pretty animations
+- Pretty animations, all done without SpriteKit
 
 Future Features
 ---------------
 - Better win/lose screens than UIAlertViews
-- Swipe based controls
 - Actual library (rather than raw code hanging off a sample view controller)
 
 License

@@ -43,12 +43,40 @@
     c.useScoreView = scoreModuleEnabled;
     c.useControlView = buttonControlsEnabled;
     c.view.backgroundColor = backgroundColor ?: [UIColor whiteColor];
-    // TODO: support swipe gestures
+    if (swipeControlsEnabled) {
+        [c setupSwipeControls];
+    }
     return c;
 }
 
 
 #pragma mark - Controller Lifecycle
+
+- (void)setupSwipeControls {
+    UISwipeGestureRecognizer *upSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+                                                                                  action:@selector(upButtonTapped)];
+    upSwipe.numberOfTouchesRequired = 1;
+    upSwipe.direction = UISwipeGestureRecognizerDirectionUp;
+    [self.view addGestureRecognizer:upSwipe];
+    
+    UISwipeGestureRecognizer *downSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+                                                                                    action:@selector(downButtonTapped)];
+    downSwipe.numberOfTouchesRequired = 1;
+    downSwipe.direction = UISwipeGestureRecognizerDirectionDown;
+    [self.view addGestureRecognizer:downSwipe];
+    
+    UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+                                                                                    action:@selector(leftButtonTapped)];
+    leftSwipe.numberOfTouchesRequired = 1;
+    leftSwipe.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:leftSwipe];
+    
+    UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+                                                                                     action:@selector(rightButtonTapped)];
+    rightSwipe.numberOfTouchesRequired = 1;
+    rightSwipe.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:rightSwipe];
+}
 
 - (void)setupGame {
     F3HScoreView *scoreView;

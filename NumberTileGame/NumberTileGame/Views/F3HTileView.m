@@ -8,6 +8,7 @@
 
 #import "F3HTileView.h"
 
+#import <QuartzCore/QuartzCore.h>
 #import "F3HTileAppearanceProvider.h"
 
 @interface F3HTileView ()

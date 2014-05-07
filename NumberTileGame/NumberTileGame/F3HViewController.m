@@ -20,7 +20,7 @@
                                                                                          winThreshold:2048
                                                                                       backgroundColor:[UIColor whiteColor]
                                                                                           scoreModule:YES
-                                                                                       buttonControls:YES
+                                                                                       buttonControls:NO
                                                                                         swipeControls:YES];
     [self presentViewController:c animated:YES completion:nil];
 }
