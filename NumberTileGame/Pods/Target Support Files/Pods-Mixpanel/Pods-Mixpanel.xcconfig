@@ -1,0 +1,2 @@
+PODS_MIXPANEL_LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/Mixpanel/Mixpanel"
+PODS_MIXPANEL_OTHER_LDFLAGS = -l"MPCategoryHelpers" -l"icucore" -framework "Accelerate" -framework "CoreGraphics" -framework "CoreTelephony" -framework "Foundation" -framework "QuartzCore" -framework "SystemConfiguration" -framework "UIKit"
