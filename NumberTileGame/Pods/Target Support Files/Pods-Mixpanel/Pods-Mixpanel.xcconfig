@@ -1,0 +1,1 @@
+PODS_MIXPANEL_OTHER_LDFLAGS = -l"icucore" -framework "Accelerate" -framework "CoreGraphics" -framework "CoreTelephony" -framework "Foundation" -framework "QuartzCore" -framework "SystemConfiguration" -framework "UIKit"

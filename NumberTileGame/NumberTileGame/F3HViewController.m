@@ -7,7 +7,7 @@
 //
 
 #import "F3HViewController.h"
-
+#import "Mixpanel.h"
 #import "F3HNumberTileGameViewController.h"
 
 @interface F3HViewController ()
@@ -16,6 +16,7 @@
 @implementation F3HViewController
 
 - (IBAction)playGameButtonTapped:(id)sender {
+ 
     F3HNumberTileGameViewController *c = [F3HNumberTileGameViewController numberTileGameWithDimension:4
                                                                                          winThreshold:2048
                                                                                       backgroundColor:[UIColor whiteColor]
@@ -23,6 +24,8 @@
                                                                                        buttonControls:NO
                                                                                         swipeControls:YES];
     [self presentViewController:c animated:YES completion:nil];
+
 }
+
 
 @end

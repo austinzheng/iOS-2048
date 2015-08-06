@@ -5,13 +5,22 @@
 //  Created by Austin Zheng on 3/22/14.
 //
 //
-
+#import "Mixpanel.h"
 #import "F3HAppDelegate.h"
 
 @implementation F3HAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+#define MIXPANEL_TOKEN @"4d90c22062bff864702b60db1b6f702f"
+    
+    // Initialize the library with your
+    // Mixpanel project token, MIXPANEL_TOKEN
+    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
+    
+    // Later, you can get your instance with
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"App Launched"];
     // Override point for customization after application launch.
     return YES;
 }
